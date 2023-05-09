@@ -1,7 +1,7 @@
 ---
 title: Java 基础 - 知识点
-prev: ./java-basic-oop
-next: false
+
+
 ---
 
 # Java 基础 - 知识点

@@ -20,8 +20,9 @@ module.exports = {
         text: 'Java',
         items: [
           { text: 'Java面向对象和基础', items: [
-              { text: 'java基础-面向对象', link: '/md/java/basic/java-basic-oop' },
-              { text: 'java基础-知识点', link: '/md/java/basic/java-basic-lan-basic' },
+              { text: 'Java基础-面向对象', link: '/md/java/basic/java-basic-oop' },
+              { text: 'Java基础-知识点', link: '/md/java/basic/java-basic-lan-basic' },
+              { text: 'Java 基础 - 图谱 & Q/A', link: '/md/java/basic/java-basic-lan-sum' },
               { text: 'Japanese', link: '/language/japanese/' }
             ] },
           { text: 'Java集合框架', items: [
@@ -75,7 +76,8 @@ module.exports = {
         collapsable: false,
         children: [
             '/md/java/basic/java-basic-oop',
-            '/md/java/basic/java-basic-lan-basic'
+            '/md/java/basic/java-basic-lan-basic',
+            '/md/java/basic/java-basic-lan-sum'
         ]
       },
       {
