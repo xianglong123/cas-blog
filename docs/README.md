@@ -1,17 +1,21 @@
 ---
 home: true
-heroImage: /images/photo.jpg
+
 heroText: 123的个人主页
-tagline: 世界的终点即是虚无
+tagline: 先从java开始写（工作4年了）
 actionText: 快速上手 →
 actionLink: guide.html
+heroImage: /images/photo.jpg
+background-image: /gif/4b2b871138f.gif;
+
+
 features:
-- title: 精简
-  details: 以 Markdown 为中心的项目结构，以最少的配置帮助你专注于写作。
-- title: 自驱动
-  details: 享受 Vue + webpack 的开发体验，在 Markdown 中使用 Vue 组件，同时可以使用 Vue 来开发自定义主题。
-- title: 高性能
-  details: VuePress 为每个页面预渲染生成静态的 HTML，同时在页面被加载的时候，将作为 SPA 运行。
+- title: 1.01^3 * 0.99^2 < 1.01
+  details: 😭三天打鱼两天晒网
+- title: 1.01^365 = 37.8  \n  0.99^365 = 0.03 
+  details: 😊积跬步以至千里 😭积怠惰以至深渊
+- title: 1.02^365 = 1337.4  \n  1.02^365 * 0.99^365 = 0.86
+  details: 😭一失足成千古恨
 footer: MIT Licensed | Copyright © 2018-present Evan You
 ---
 
