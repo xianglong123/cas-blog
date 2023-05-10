@@ -48,7 +48,8 @@ module.exports = {
           children: [
             '/md/java/basic/java-basic-oop',
             '/md/java/basic/java-basic-lan-basic',
-            '/md/java/basic/java-basic-lan-sum'
+            '/md/java/basic/java-basic-lan-sum',
+            '/md/java/basic/java-basic-x-generic'
           ]
         },
         {
