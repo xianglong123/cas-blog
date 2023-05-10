@@ -12,7 +12,10 @@ module.exports = {
   serviceWorker: true, // 是否开启 PWA
   base: '/', // 部署到github相关的配置
   markdown: {
-    lineNumbers: true // 代码块是否显示行号
+    lineNumbers: true, // 代码块是否显示行号
+    extendMarkdown: md => {
+      md.use(require("markdown-it-disable-url-encode"));
+    }
   },
   themeConfig: {
     nav:[ // 导航栏配置
@@ -31,9 +34,7 @@ module.exports = {
             ] }
         ]
       },
-      {text: 'java', link: '/md/java/basic/java-basic-oop.md' },
       {text: '数据库', link: '/db/'},
-      {text: '微博', link: 'https://baidu.com'},
       {
         text: 'Languages',
         ariaLabel: 'Language Menu',
