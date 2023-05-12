@@ -44,13 +44,14 @@ Java异常是Java提供的一种识别及响应错误的一致性机制，java�
         *   异常是否耗时？为什么会耗时？
     *   参考文章
 
+
 ### # 异常的层次结构
 
 > 异常指不期而至的各种状况，如：文件找不到、网络连接失败、非法参数等。异常是一个事件，它发生在程序运行期间，干扰了正常的指令流程。Java通 过API中Throwable类的众多子类描述各种不同的异常。因而，Java异常都是对象，是Throwable子类的实例，描述了出现在一段编码中的 错误条件。当条件生成时，错误将引发异常。
 
 > Java异常类层次结构图：
 
-> ![](./Java 基础 - 异常机制详解 _ Java 全栈知识体系_files/java-basic-exception-1.png)
+> ![](images/java-basic-exception-1.png)
 
 ### # Throwable
 
@@ -113,84 +114,25 @@ Java异常是Java提供的一种识别及响应错误的一致性机制，java�
 > 在Java中，当前执行的语句必属于某个方法，Java解释器调用main方法执行开始执行程序。若方法中存在检查异常，如果不对其捕获，那必须在方法头中显式声明该异常，以便于告知方法调用者此方法有异常，需要进行处理。 在方法中声明一个异常，方法头中使用关键字throws，后面接上要声明的异常。若声明多个异常，则使用逗号分割。如下所示：
 
 ```java
-public
-																																								static
-																																								void
-																																								method
-																																								(
-																																								)
-																																								throws
-																																								IOException
-																																								,
-																																								FileNotFoundException
-																																								{
-																																								//something statements
-																																								}
+public static void method() throws IOException, FileNotFoundException{
+    //something statements
+}
 ```
 
 > 注意：若是父类的方法没有声明异常，则子类继承方法后，也不能声明异常。
 
 > 通常，应该捕获那些知道如何处理的异常，将不知道如何处理的异常继续传递下去。传递异常可以在方法签名处使用 throws 关键字声明可能会抛出的异常。
 
-```
-private
-																																								static
-																																								void
-																																								readFile
-																																								(
-																																								String filePath
-																																								)
-																																								throws
-																																								IOException
-																																								{
-																																								File file 
-																																								=
-																																								new
-																																								File
-																																								(filePath
-																																								)
-																																								;
-																																								String result
-																																								;
-																																								BufferedReader reader 
-																																								=
-																																								new
-																																								BufferedReader
-																																								(
-																																								new
-																																								FileReader
-																																								(file
-																																								)
-																																								)
-																																								;
-																																								while
-																																								(
-																																								(result 
-																																								= reader
-																																								.
-																																								readLine
-																																								(
-																																								)
-																																								)
-																																								!=
-																																								null
-																																								)
-																																								{
-																																								System
-																																								.out
-																																								.
-																																								println
-																																								(result
-																																								)
-																																								;
-																																								}
-    reader
-																																								.
-																																								close
-																																								(
-																																								)
-																																								;
-																																								}
+```java
+private static void readFile(String filePath) throws IOException {
+    File file = new File(filePath);
+    String result;
+    BufferedReader reader = new BufferedReader(new FileReader(file));
+    while((result = reader.readLine())!=null) {
+        System.out.println(result);
+    }
+    reader.close();
+}
 ```
 
 > Throws抛出异常的规则：
@@ -204,111 +146,43 @@ private
 
 > 如果代码可能会引发某种错误，可以创建一个合适的异常类实例并抛出它，这就是抛出异常。如下所示：
 
-```
-public
-																																								static
-																																								double
-																																								method
-																																								(
-																																								int value
-																																								)
-																																								{
-																																								if
-																																								(value 
-																																								==
-																																								0
-																																								)
-																																								{
-																																								throw
-																																								new
-																																								ArithmeticException
-																																								(
-																																								"参数不能为0"
-																																								)
-																																								;
-																																								//抛出一个运行时异常
-																																								}
-																																								return
-																																								0
-																																								/ value
-																																								;
-																																								}
+```java
+public static double method(int value) {
+    if(value == 0) {
+        throw new ArithmeticException("参数不能为0"); //抛出一个运行时异常
+    }
+    return 0 / value;
+}
 ```
 
 > 大部分情况下都不需要手动抛出异常，因为Java的大部分方法要么已经处理异常，要么已声明异常。所以一般都是捕获异常或者再往上抛。
 
 > 有时我们会从 catch 中抛出一个异常，目的是为了改变异常的类型。多用于在多系统集成时，当某个子系统故障，异常类型可能有多种，可以用统一的异常类型向外暴露，不需暴露太多内部异常细节。
 
-```
-private
-																																								static
-																																								void
-																																								readFile
-																																								(
-																																								String filePath
-																																								)
-																																								throws
-																																								MyException
-																																								{
-																																								try
-																																								{
-																																								// code
-																																								}
-																																								catch
-																																								(
-																																								IOException e
-																																								)
-																																								{
-																																								MyException ex 
-																																								=
-																																								new
-																																								MyException
-																																								(
-																																								"read file failed."
-																																								)
-																																								;
-        ex
-																																								.
-																																								initCause
-																																								(e
-																																								)
-																																								;
-																																								throw ex
-																																								;
-																																								}
-																																								}
+```java
+private static void readFile(String filePath) throws MyException {    
+    try {
+        // code
+    } catch (IOException e) {
+        MyException ex = new MyException("read file failed.");
+        ex.initCause(e);
+        throw ex;
+    }
+}
 ```
 
 ### # 异常的自定义
 
 > 习惯上，定义一个异常类应包含两个构造函数，一个无参构造函数和一个带有详细描述信息的构造函数（Throwable 的 toString 方法会打印这些详细信息，调试时很有用）, 比如上面用到的自定义MyException：
 
-```
-public
-																																								class
-																																								MyException
-																																								extends
-																																								Exception
-																																								{
-																																								public
-																																								MyException
-																																								(
-																																								)
-																																								{
-																																								}
-																																								public
-																																								MyException
-																																								(
-																																								String msg
-																																								)
-																																								{
-																																								super
-																																								(msg
-																																								)
-																																								;
-																																								}
-																																								// ...
-																																								}
+```java
+public class MyException extends Exception {
+    public MyException(){ }
+    public MyException(String msg){
+        super(msg);
+    }
+    // ...
+}
 ```
 
 ### # 异常的捕获
@@ -324,90 +198,44 @@ public
 
 > 在一个 try-catch 语句块中可以捕获多个异常类型，并对不同类型的异常做出不同的处理
 
-```
-private
-																																								static
-																																								void
-																																								readFile
-																																								(
-																																								String filePath
-																																								)
-																																								{
-																																								try
-																																								{
-																																								// code
-																																								}
-																																								catch
-																																								(
-																																								FileNotFoundException e
-																																								)
-																																								{
-																																								// handle FileNotFoundException
-																																								}
-																																								catch
-																																								(
-																																								IOException e
-																																								)
-																																								{
-																																								// handle IOException
-																																								}
-																																								}
+```java
+private static void readFile(String filePath) {
+    try {
+        // code
+    } catch (FileNotFoundException e) {
+        // handle FileNotFoundException
+    } catch (IOException e){
+        // handle IOException
+    }
+}
 ```
 
 > 同一个 catch 也可以捕获多种类型异常，用 | 隔开
 
-```
-private
-																																								static
-																																								void
-																																								readFile
-																																								(
-																																								String filePath
-																																								)
-																																								{
-																																								try
-																																								{
-																																								// code
-																																								}
-																																								catch
-																																								(
-																																								FileNotFoundException
-																																								|
-																																								UnknownHostException e
-																																								)
-																																								{
-																																								// handle FileNotFoundException or UnknownHostException
-																																								}
-																																								catch
-																																								(
-																																								IOException e
-																																								)
-																																								{
-																																								// handle IOException
-																																								}
-																																								}
+```java
+private static void readFile(String filePath) {
+    try {
+        // code
+    } catch (FileNotFoundException | UnknownHostException e) {
+        // handle FileNotFoundException or UnknownHostException
+    } catch (IOException e){
+        // handle IOException
+    }
+}
 ```
 
 #### # try-catch-finally
 
 *   常规语法
 
-```
-try
-																																								{
-																																								//执行程序代码，可能会出现异常                 
-																																								}
-																																								catch
-																																								(
-																																								Exception e
-																																								)
-																																								{
-																																								//捕获异常并处理   
-																																								}
-																																								finally
-																																								{
-																																								//必执行的代码
-																																								}
+```java
+try {                        
+    //执行程序代码，可能会出现异常                 
+} catch(Exception e) {   
+    //捕获异常并处理   
+} finally {
+    //必执行的代码
+}
 ```
 
 *   执行的顺序
@@ -415,139 +243,36 @@ try
     *   当try捕获到异常，catch语句块里没有处理此异常的情况：当try语句块里的某条语句出现异常时，而没有处理此异常的catch语句块时，此异常将会抛给JVM处理，finally语句块里的语句还是会被执行，但finally语句块后的语句不会被执行；
     *   当try捕获到异常，catch语句块里有处理此异常的情况：在try语句块中是按照顺序来执行的，当执行到某一条语句出现异常时，程序将跳到catch语句块，并与catch语句块逐一匹配，找到与之对应的处理程序，其他的catch语句块将不会被执行，而try语句块中，出现异常之后的语句也不会被执行，catch语句块执行完后，执行finally语句块里的语句，最后执行finally语句块后的语句；
 
-> ![](./Java 基础 - 异常机制详解 _ Java 全栈知识体系_files/java-basic-exception-2.jpg)
+> ![](images/java-basic-exception-2.jpg)
 
 *   一个完整的例子
 
-```
-private
-																																									static
-																																									void
-																																									readFile
-																																									(
-																																									String filePath
-																																									)
-																																									throws
-																																									MyException
-																																									{
-																																									File file 
-																																									=
-																																									new
-																																									File
-																																									(filePath
-																																									)
-																																									;
-																																									String result
-																																									;
-																																									BufferedReader reader 
-																																									=
-																																									null
-																																									;
-																																									try
-																																									{
-        reader 
-																																									=
-																																									new
-																																									BufferedReader
-																																									(
-																																									new
-																																									FileReader
-																																									(file
-																																									)
-																																									)
-																																									;
-																																									while
-																																									(
-																																									(result 
-																																									= reader
-																																									.
-																																									readLine
-																																									(
-																																									)
-																																									)
-																																									!=
-																																									null
-																																									)
-																																									{
-																																									System
-																																									.out
-																																									.
-																																									println
-																																									(result
-																																									)
-																																									;
-																																									}
-																																									}
-																																									catch
-																																									(
-																																									IOException e
-																																									)
-																																									{
-																																									System
-																																									.out
-																																									.
-																																									println
-																																									(
-																																									"readFile method catch block."
-																																									)
-																																									;
-																																									MyException ex 
-																																									=
-																																									new
-																																									MyException
-																																									(
-																																									"read file failed."
-																																									)
-																																									;
-        ex
-																																									.
-																																									initCause
-																																									(e
-																																									)
-																																									;
-																																									throw ex
-																																									;
-																																									}
-																																									finally
-																																									{
-																																									System
-																																									.out
-																																									.
-																																									println
-																																									(
-																																									"readFile method finally block."
-																																									)
-																																									;
-																																									if
-																																									(
-																																									null
-																																									!= reader
-																																									)
-																																									{
-																																									try
-																																									{
-                reader
-																																									.
-																																									close
-																																									(
-																																									)
-																																									;
-																																									}
-																																									catch
-																																									(
-																																									IOException e
-																																									)
-																																									{
-                e
-																																									.
-																																									printStackTrace
-																																									(
-																																									)
-																																									;
-																																									}
-																																									}
-																																									}
-																																									}
+```java
+private static void readFile(String filePath) throws MyException {
+    File file = new File(filePath);
+    String result;
+    BufferedReader reader = null;
+    try {
+        reader = new BufferedReader(new FileReader(file));
+        while((result = reader.readLine())!=null) {
+            System.out.println(result);
+        }
+    } catch (IOException e) {
+        System.out.println("readFile method catch block.");
+        MyException ex = new MyException("read file failed.");
+        ex.initCause(e);
+        throw ex;
+    } finally {
+        System.out.println("readFile method finally block.");
+        if (null != reader) {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
 ```
 
 #### # try-finally
@@ -558,29 +283,14 @@ private
 
 > try-finally可用在不需要捕获异常的代码，可以保证资源在使用后被关闭。例如IO流中执行完相应操作后，关闭相应资源；使用Lock对象保证线程同步，通过finally可以保证锁会被释放；数据库连接代码时，关闭连接操作等等。
 
-```
+```java
 //以Lock加锁为例，演示try-finally
-																																									ReentrantLock lock 
-																																									=
-																																									new
-																																									ReentrantLock
-																																									(
-																																									)
-																																									;
-																																									try
-																																									{
-																																									//需要加锁的代码
-																																									}
-																																									finally
-																																									{
-    lock
-																																									.
-																																									unlock
-																																									(
-																																									)
-																																									;
-																																									//保证锁一定被释放
-																																									}
+ReentrantLock lock = new ReentrantLock();
+try {
+    //需要加锁的代码
+} finally {
+    lock.unlock(); //保证锁一定被释放
+}
 ```
 
 > finally遇见如下情况不会执行
@@ -598,77 +308,25 @@ private
 
 *   代码实现
 
-```
-private
-																																									static
-																																									void
-																																									tryWithResourceTest
-																																									(
-																																									)
-																																									{
-																																									try
-																																									(
-																																									Scanner scanner 
-																																									=
-																																									new
-																																									Scanner
-																																									(
-																																									new
-																																									FileInputStream
-																																									(
-																																									"c:/abc"
-																																									)
-																																									,
-																																									"UTF-8"
-																																									)
-																																									)
-																																									{
-																																									// code
-																																									}
-																																									catch
-																																									(
-																																									IOException e
-																																									)
-																																									{
-																																									// handle exception
-																																									}
-																																									}
+```java
+private  static void tryWithResourceTest(){
+    try (Scanner scanner = new Scanner(new FileInputStream("c:/abc"),"UTF-8")){
+        // code
+    } catch (IOException e){
+        // handle exception
+    }
+}
 ```
 
 *   看下Scanner
 
-```
-public
-																																									final
-																																									class
-																																									Scanner
-																																									implements
-																																									Iterator
-
-																																										<
-																																										String
-																																										>
-
-																																									,
-																																									Closeable
-																																									{
-																																									// ...
-																																									}
-																																									public
-																																									interface
-																																									Closeable
-																																									extends
-																																									AutoCloseable
-																																									{
-																																									public
-																																									void
-																																									close
-																																									(
-																																									)
-																																									throws
-																																									IOException
-																																									;
-																																									}
+```java
+public final class Scanner implements Iterator<String>, Closeable {
+  // ...
+}
+public interface Closeable extends AutoCloseable {
+    public void close() throws IOException;
+}
 ```
 
 > try 代码块退出时，会自动调用 scanner.close 方法，和把 scanner.close 方法放在 finally 代码块中不同的是，若 scanner.close 抛出异常，则会被抑制，抛出的仍然为原始异常。被抑制的异常会由 addSusppressed 方法添加到原来的异常，如果想要获取被抑制的异常列表，可以调用 getSuppressed 方法来获取。
@@ -744,36 +402,20 @@ public
 
 *   代码1
 
-```
-if
-																																									(obj 
-																																									!=
-																																									null
-																																									)
-																																									{
-																																									//...
-																																									}
+```java
+if (obj != null) {
+  //...
+}
 ```
 
 *   代码2
 
-```
-try
-																																									{ 
-  obj
-																																									.
-																																									method
-																																									(
-																																									)
-																																									;
-																																									}
-																																									catch
-																																									(
-																																									NullPointerException e
-																																									)
-																																									{
-																																									//...
-																																									}
+```java
+try { 
+  obj.method(); 
+} catch (NullPointerException e) {
+  //...
+}
 ```
 
 > 主要原因有三点：
@@ -788,68 +430,21 @@ try
 
 *   错误示例
 
-```
-public
-																																									void
-																																									doNotCloseResourceInTry
-																																									(
-																																									)
-																																									{
-																																									FileInputStream inputStream 
-																																									=
-																																									null
-																																									;
-																																									try
-																																									{
-																																									File file 
-																																									=
-																																									new
-																																									File
-																																									(
-																																									"./tmp.txt"
-																																									)
-																																									;
-        inputStream 
-																																									=
-																																									new
-																																									FileInputStream
-																																									(file
-																																									)
-																																									;
-																																									// use the inputStream to read a file
-																																									// do NOT do this
-        inputStream
-																																									.
-																																									close
-																																									(
-																																									)
-																																									;
-																																									}
-																																									catch
-																																									(
-																																									FileNotFoundException e
-																																									)
-																																									{
-        log
-																																									.
-																																									error
-																																									(e
-																																									)
-																																									;
-																																									}
-																																									catch
-																																									(
-																																									IOException e
-																																									)
-																																									{
-        log
-																																									.
-																																									error
-																																									(e
-																																									)
-																																									;
-																																									}
-																																									}
+```java
+public void doNotCloseResourceInTry() {
+    FileInputStream inputStream = null;
+    try {
+        File file = new File("./tmp.txt");
+        inputStream = new FileInputStream(file);
+        // use the inputStream to read a file
+        // do NOT do this
+        inputStream.close();
+    } catch (FileNotFoundException e) {
+        log.error(e);
+    } catch (IOException e) {
+        log.error(e);
+    }
+}
 ```
 
 > 问题就是，只有没有异常抛出的时候，这段代码才可以正常工作。try 代码块内代码会正常执行，并且资源可以正常关闭。但是，使用 try 代码块是有原因的，一般调用一个或多个可能抛出异常的方法，而且，你自己也可能会抛出一个异常，这意味着代码可能不会执行到 try 代码块的最后部分。结果就是，你并没有关闭资源。
@@ -860,139 +455,42 @@ public
 
 > 与前面几行 try 代码块不同，finally 代码块总是会被执行。不管 try 代码块成功执行之后还是你在 catch 代码块中处理完异常后都会执行。因此，你可以确保你清理了所有打开的资源。
 
-```
-public
-																																									void
-																																									closeResourceInFinally
-																																									(
-																																									)
-																																									{
-																																									FileInputStream inputStream 
-																																									=
-																																									null
-																																									;
-																																									try
-																																									{
-																																									File file 
-																																									=
-																																									new
-																																									File
-																																									(
-																																									"./tmp.txt"
-																																									)
-																																									;
-        inputStream 
-																																									=
-																																									new
-																																									FileInputStream
-																																									(file
-																																									)
-																																									;
-																																									// use the inputStream to read a file
-																																									}
-																																									catch
-																																									(
-																																									FileNotFoundException e
-																																									)
-																																									{
-        log
-																																									.
-																																									error
-																																									(e
-																																									)
-																																									;
-																																									}
-																																									finally
-																																									{
-																																									if
-																																									(inputStream 
-																																									!=
-																																									null
-																																									)
-																																									{
-																																									try
-																																									{
-                inputStream
-																																									.
-																																									close
-																																									(
-																																									)
-																																									;
-																																									}
-																																									catch
-																																									(
-																																									IOException e
-																																									)
-																																									{
-                log
-																																									.
-																																									error
-																																									(e
-																																									)
-																																									;
-																																									}
-																																									}
-																																									}
-																																									}
+```java
+public void closeResourceInFinally() {
+    FileInputStream inputStream = null;
+    try {
+        File file = new File("./tmp.txt");
+        inputStream = new FileInputStream(file);
+        // use the inputStream to read a file
+    } catch (FileNotFoundException e) {
+        log.error(e);
+    } finally {
+        if (inputStream != null) {
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                log.error(e);
+            }
+        }
+    }
+}
 ```
 
 *   方法二：Java 7 的 try-with-resource 语法
 
 > 如果你的资源实现了 AutoCloseable 接口，你可以使用这个语法。大多数的 Java 标准资源都继承了这个接口。当你在 try 子句中打开资源，资源会在 try 代码块执行后或异常处理后自动关闭。
 
-```
-public
-																																									void
-																																									automaticallyCloseResource
-																																									(
-																																									)
-																																									{
-																																									File file 
-																																									=
-																																									new
-																																									File
-																																									(
-																																									"./tmp.txt"
-																																									)
-																																									;
-																																									try
-																																									(
-																																									FileInputStream inputStream 
-																																									=
-																																									new
-																																									FileInputStream
-																																									(file
-																																									)
-																																									;
-																																									)
-																																									{
-																																									// use the inputStream to read a file
-																																									}
-																																									catch
-																																									(
-																																									FileNotFoundException e
-																																									)
-																																									{
-        log
-																																									.
-																																									error
-																																									(e
-																																									)
-																																									;
-																																									}
-																																									catch
-																																									(
-																																									IOException e
-																																									)
-																																									{
-        log
-																																									.
-																																									error
-																																									(e
-																																									)
-																																									;
-																																									}
-																																									}
+```java
+public void automaticallyCloseResource() {
+    File file = new File("./tmp.txt");
+    try (FileInputStream inputStream = new FileInputStream(file);) {
+        // use the inputStream to read a file
+    } catch (FileNotFoundException e) {
+        log.error(e);
+    } catch (IOException e) {
+        log.error(e);
+    }
+}
 ```
 
 ### # 尽量使用标准的异常
@@ -1026,27 +524,15 @@ public
 
 > 在 Javadoc 添加 @throws 声明，并且描述抛出异常的场景。
 
-```
+```java
 /**
 * Method description
 * 
-* 
-																																										@throws
-
-																																											MyBusinessException - businuess exception description
+* @throws MyBusinessException - businuess exception description
 */
-
-																																									public
-																																									void
-																																									doSomething
-																																									(
-																																									String input
-																																									)
-																																									throws
-																																									MyBusinessException
-																																									{
-																																									// ...
-																																									}
+public void doSomething(String input) throws MyBusinessException {
+   // ...
+}
 ```
 
 > 同时，在抛出MyBusinessException 异常时，需要尽可能精确地描述问题和相关信息，这样无论是打印到日志中还是在监控工具中，都能够更容易被人阅读，从而可以更好地定位具体错误信息、错误的严重程度等。
@@ -1061,45 +547,16 @@ public
 
 > 你可以在下面的代码片断中看到这样一个 try-catch 语句的例子。 第一个 catch 块处理所有 NumberFormatException 异常，第二个处理所有非 NumberFormatException 异常的IllegalArgumentException 异常。
 
-```
-public
-																																									void
-																																									catchMostSpecificExceptionFirst
-																																									(
-																																									)
-																																									{
-																																									try
-																																									{
-																																									doSomething
-																																									(
-																																									"A message"
-																																									)
-																																									;
-																																									}
-																																									catch
-																																									(
-																																									NumberFormatException e
-																																									)
-																																									{
-        log
-																																									.
-																																									error
-																																									(e
-																																									)
-																																									;
-																																									}
-																																									catch
-																																									(
-																																									IllegalArgumentException e
-																																									)
-																																									{
-        log
-																																									.
-																																									error
-																																									(e
-																																									)
-																																									}
-																																									}
+```java
+public void catchMostSpecificExceptionFirst() {
+    try {
+        doSomething("A message");
+    } catch (NumberFormatException e) {
+        log.error(e);
+    } catch (IllegalArgumentException e) {
+        log.error(e)
+    }
+}
 ```
 
 ### # 不要捕获 Throwable 类
@@ -1110,83 +567,42 @@ public
 
 > 所以，最好不要捕获 Throwable ，除非你确定自己处于一种特殊的情况下能够处理错误。
 
-```
-public
-																																									void
-																																									doNotCatchThrowable
-																																									(
-																																									)
-																																									{
-																																									try
-																																									{
-																																									// do something
-																																									}
-																																									catch
-																																									(
-																																									Throwable t
-																																									)
-																																									{
-																																									// don't do this!
-																																									}
-																																									}
+```java
+public void doNotCatchThrowable() {
+    try {
+        // do something
+    } catch (Throwable t) {
+        // don't do this!
+    }
+}
 ```
 
 ### # 不要忽略异常
 
 > > 很多时候，开发者很有自信不会抛出异常，因此写了一个catch块，但是没有做任何处理或者记录日志。
 
-```
-public
-																																									void
-																																									doNotIgnoreExceptions
-																																									(
-																																									)
-																																									{
-																																									try
-																																									{
-																																									// do something
-																																									}
-																																									catch
-																																									(
-																																									NumberFormatException e
-																																									)
-																																									{
-																																									// this will never happen
-																																									}
-																																									}
+```java
+public void doNotIgnoreExceptions() {
+    try {
+        // do something
+    } catch (NumberFormatException e) {
+        // this will never happen
+    }
+}
 ```
 
 > 但现实是经常会出现无法预料的异常，或者无法确定这里的代码未来是不是会改动(删除了阻止异常抛出的代码)，而此时由于异常被捕获，使得无法拿到足够的错误信息来定位问题。
 
 > 合理的做法是至少要记录异常的信息。
 
-```
-public
-																																									void
-																																									logAnException
-																																									(
-																																									)
-																																									{
-																																									try
-																																									{
-																																									// do something
-																																									}
-																																									catch
-																																									(
-																																									NumberFormatException e
-																																									)
-																																									{
-        log
-																																									.
-																																									error
-																																									(
-																																									"This should never happen: "
-																																									+ e
-																																									)
-																																									;
-																																									// see this line
-																																									}
-																																									}
+```java
+public void logAnException() {
+    try {
+        // do something
+    } catch (NumberFormatException e) {
+        log.error("This should never happen: " + e); // see this line
+    }
+}
 ```
 
 ### # 不要记录并抛出异常
@@ -1195,178 +611,37 @@ public
 
 > 可以发现很多代码甚至类库中都会有捕获异常、记录日志并再次抛出的逻辑。如下：
 
-```
-try
-																																									{
-																																									new
-																																									Long
-																																									(
-																																									"xyz"
-																																									)
-																																									;
-																																									}
-																																									catch
-																																									(
-																																									NumberFormatException e
-																																									)
-																																									{
-    log
-																																									.
-																																									error
-																																									(e
-																																									)
-																																									;
-																																									throw e
-																																									;
-																																									}
+```java
+try {
+    new Long("xyz");
+} catch (NumberFormatException e) {
+    log.error(e);
+    throw e;
+}
 ```
 
 > 这个处理逻辑看着是合理的。但这经常会给同一个异常输出多条日志。如下：
 
-```
-17
-																																									:
-																																									44
-																																									:
-																																									28
-																																									,
-																																									945
-																																									ERROR
-																																									TestExceptionHandling
-																																									:
-																																									65
-																																									-
-
-																																										java
-																																											.lang
-																																											.
-																																										NumberFormatException
-
-																																									:
-																																									For input string
-																																									:
-																																									"xyz"
-																																									Exception in thread 
-																																									"main"
-
-																																										java
-																																											.lang
-																																											.
-																																										NumberFormatException
-
-																																									:
-																																									For input string
-																																									:
-																																									"xyz"
-at 
-
-																																										java
-																																											.lang
-																																											.
-																																										NumberFormatException
-
-																																									.
-																																									forInputString
-																																									(
-																																									NumberFormatException
-																																									.java
-																																									:
-																																									65
-																																									)
-at 
-
-																																										java
-																																											.lang
-																																											.
-																																										Long
-
-																																									.
-																																									parseLong
-																																									(
-																																									Long
-																																									.java
-																																									:
-																																									589
-																																									)
-at 
-
-																																										java
-																																											.lang
-																																											.
-																																										Long
-
-																																									.
-																																									(
-																																									Long
-																																									.java
-																																									:
-																																									965
-																																									)
-at 
-
-																																										com
-																																											.stackify
-																																											.example
-																																											.
-																																										TestExceptionHandling
-
-																																									.
-																																									logAndThrowException
-																																									(
-																																									TestExceptionHandling
-																																									.java
-																																									:
-																																									63
-																																									)
-at 
-
-																																										com
-																																											.stackify
-																																											.example
-																																											.
-																																										TestExceptionHandling
-
-																																									.
-																																									main
-																																									(
-																																									TestExceptionHandling
-																																									.java
-																																									:
-																																									58
-																																									)
+```bash
+17:44:28,945 ERROR TestExceptionHandling:65 - java.lang.NumberFormatException: For input string: "xyz"
+Exception in thread "main" java.lang.NumberFormatException: For input string: "xyz"
+at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+at java.lang.Long.parseLong(Long.java:589)
+at java.lang.Long.(Long.java:965)
+at com.stackify.example.TestExceptionHandling.logAndThrowException(TestExceptionHandling.java:63)
+at com.stackify.example.TestExceptionHandling.main(TestExceptionHandling.java:58)
 ```
 
 > 如上所示，后面的日志也没有附加更有用的信息。如果想要提供更加有用的信息，那么可以将异常包装为自定义异常。
 
-```
-public
-																																									void
-																																									wrapException
-																																									(
-																																									String input
-																																									)
-																																									throws
-																																									MyBusinessException
-																																									{
-																																									try
-																																									{
-																																									// do something
-																																									}
-																																									catch
-																																									(
-																																									NumberFormatException e
-																																									)
-																																									{
-																																									throw
-																																									new
-																																									MyBusinessException
-																																									(
-																																									"A message that describes the error."
-																																									, e
-																																									)
-																																									;
-																																									}
-																																									}
+```java
+public void wrapException(String input) throws MyBusinessException {
+    try {
+        // do something
+    } catch (NumberFormatException e) {
+        throw new MyBusinessException("A message that describes the error.", e);
+    }
+}
 ```
 
 > 因此，仅仅当想要处理异常时才去捕获，否则只需要在方法签名中声明让调用者去处理。
@@ -1375,35 +650,14 @@ public
 
 > 捕获标准异常并包装为自定义异常是一个很常见的做法。这样可以添加更为具体的异常信息并能够做针对的异常处理。 在你这样做时，请确保将原始异常设置为原因（注：参考下方代码 NumberFormatException e 中的原始异常 e ）。Exception 类提供了特殊的构造函数方法，它接受一个 Throwable 作为参数。否则，你将会丢失堆栈跟踪和原始异常的消息，这将会使分析导致异常的异常事件变得困难。
 
-```
-public
-																																									void
-																																									wrapException
-																																									(
-																																									String input
-																																									)
-																																									throws
-																																									MyBusinessException
-																																									{
-																																									try
-																																									{
-																																									// do something
-																																									}
-																																									catch
-																																									(
-																																									NumberFormatException e
-																																									)
-																																									{
-																																									throw
-																																									new
-																																									MyBusinessException
-																																									(
-																																									"A message that describes the error."
-																																									, e
-																																									)
-																																									;
-																																									}
-																																									}
+```java
+public void wrapException(String input) throws MyBusinessException {
+    try {
+        // do something
+    } catch (NumberFormatException e) {
+        throw new MyBusinessException("A message that describes the error.", e);
+    }
+}
 ```
 
 ### # 不要使用异常控制程序的流程
@@ -1416,33 +670,17 @@ public
 
 > 如下是一个反例：
 
-```
-private
-																																									int x 
-																																									=
-																																									0
-																																									;
-																																									public
-																																									int
-																																									checkReturn
-																																									(
-																																									)
-																																									{
-																																									try
-																																									{
-																																									// x等于1，此处不返回
-																																									return
-																																									++x
-																																									;
-																																									}
-																																									finally
-																																									{
-																																									// 返回的结果是2
-																																									return
-																																									++x
-																																									;
-																																									}
-																																									}
+```java
+private int x = 0;
+public int checkReturn() {
+    try {
+        // x等于1，此处不返回
+        return ++x;
+    } finally {
+        // 返回的结果是2
+        return ++x;
+    }
+}
 ```
 
 ### # 深入理解异常
@@ -1455,34 +693,14 @@ private
 
 > 提到JVM处理异常的机制，就需要提及Exception Table，以下称为异常表。我们暂且不急于介绍异常表，先看一个简单的 Java 处理异常的小例子。
 
-```
-public
-																																									static
-																																									void
-																																									simpleTryCatch
-																																									(
-																																									)
-																																									{
-																																									try
-																																									{
-																																									testNPE
-																																									(
-																																									)
-																																									;
-																																									}
-																																									catch
-																																									(
-																																									Exception e
-																																									)
-																																									{
-       e
-																																									.
-																																									printStackTrace
-																																									(
-																																									)
-																																									;
-																																									}
-																																									}
+```java
+public static void simpleTryCatch() {
+   try {
+       testNPE();
+   } catch (Exception e) {
+       e.printStackTrace();
+   }
+}
 ```
 
 > 上面的代码是一个很简单的例子，用来捕获处理一个潜在的空指针异常。
@@ -1493,51 +711,19 @@ public
 
 > 然后我们使用javap来分析这段代码（需要先使用javac编译）
 
-```
+```bash
 //javap -c Main
-																																									public
-																																									static
-																																									void
-																																									simpleTryCatch
-																																									(
-																																									)
-																																									;
-																																									Code
-																																									:
-																																									0
-																																									: invokestatic  #
-																																									3
-																																									// Method testNPE:()V
-																																									3
-																																									:
-																																									goto
-																																									11
-																																									6
-																																									: astore_0
-
-																																									7
-																																									: aload_0
-
-																																									8
-																																									: invokevirtual #
-																																									5
-																																									// Method java/lang/Exception.printStackTrace:()V
-																																									11
-																																									:
-																																									return
-																																									Exception table
-																																									:
-       from    
-																																									to
-																																									target type
-
-																																									0
-																																									3
-																																									6
-																																									Class java
-																																									/lang
-																																									/
-																																									Exception
+ public static void simpleTryCatch();
+    Code:
+       0: invokestatic  #3                  // Method testNPE:()V
+       3: goto          11
+       6: astore_0
+       7: aload_0
+       8: invokevirtual #5                  // Method java/lang/Exception.printStackTrace:()V
+      11: return
+    Exception table:
+       from    to  target type
+           0     3     6   Class java/lang/Exception
 ```
 
 > 看到上面的代码，应该会有会心一笑，因为终于看到了Exception table，也就是我们要研究的异常表。
@@ -1566,149 +752,47 @@ public
 
 > 除了简单的try-catch外，我们还常常和finally做结合使用。比如这样的代码
 
-```
-public
-																																									static
-																																									void
-																																									simpleTryCatchFinally
-																																									(
-																																									)
-																																									{
-																																									try
-																																									{
-																																									testNPE
-																																									(
-																																									)
-																																									;
-																																									}
-																																									catch
-																																									(
-																																									Exception e
-																																									)
-																																									{
-       e
-																																									.
-																																									printStackTrace
-																																									(
-																																									)
-																																									;
-																																									}
-																																									finally
-																																									{
-																																									System
-																																									.out
-																																									.
-																																									println
-																																									(
-																																									"Finally"
-																																									)
-																																									;
-																																									}
-																																									}
+```java
+public static void simpleTryCatchFinally() {
+   try {
+       testNPE();
+   } catch (Exception e) {
+       e.printStackTrace();
+   } finally {
+       System.out.println("Finally");
+   }
+}
 ```
 
 > 同样我们使用javap分析一下代码
 
-```
-public
-																																									static
-																																									void
-																																									simpleTryCatchFinally
-																																									(
-																																									)
-																																									;
-																																									Code
-																																									:
-																																									0
-																																									: invokestatic  #
-																																									3
-																																									// Method testNPE:()V
-																																									3
-																																									: getstatic     #
-																																									6
-																																									// Field java/lang/System.out:Ljava/io/PrintStream;
-																																									6
-																																									: ldc           #
-																																									7
-																																									// String Finally
-																																									8
-																																									: invokevirtual #
-																																									8
-																																									// Method java/io/PrintStream.println:(Ljava/lang/String;)V
-																																									11
-																																									:
-																																									goto
-																																									41
-																																									14
-																																									: astore_0
-
-																																									15
-																																									: aload_0
-
-																																									16
-																																									: invokevirtual #
-																																									5
-																																									// Method java/lang/Exception.printStackTrace:()V
-																																									19
-																																									: getstatic     #
-																																									6
-																																									// Field java/lang/System.out:Ljava/io/PrintStream;
-																																									22
-																																									: ldc           #
-																																									7
-																																									// String Finally
-																																									24
-																																									: invokevirtual #
-																																									8
-																																									// Method java/io/PrintStream.println:(Ljava/lang/String;)V
-																																									27
-																																									:
-																																									goto
-																																									41
-																																									30
-																																									: astore_1
-
-																																									31
-																																									: getstatic     #
-																																									6
-																																									// Field java/lang/System.out:Ljava/io/PrintStream;
-																																									34
-																																									: ldc           #
-																																									7
-																																									// String Finally
-																																									36
-																																									: invokevirtual #
-																																									8
-																																									// Method java/io/PrintStream.println:(Ljava/lang/String;)V
-																																									39
-																																									: aload_1
-
-																																									40
-																																									: athrow
-
-																																									41
-																																									:
-																																									return
-																																									Exception table
-																																									:
-       from    
-																																									to
-																																									target type
-
-																																									0
-																																									3
-																																									14
-																																									Class java
-																																									/lang
-																																									/
-																																									Exception
-																																									0
-																																									3
-																																									30   any
-
-																																									14
-																																									19
-																																									30   any
+```bash
+public static void simpleTryCatchFinally();
+    Code:
+       0: invokestatic  #3                  // Method testNPE:()V
+       3: getstatic     #6                  // Field java/lang/System.out:Ljava/io/PrintStream;
+       6: ldc           #7                  // String Finally
+       8: invokevirtual #8                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      11: goto          41
+      14: astore_0
+      15: aload_0
+      16: invokevirtual #5                  // Method java/lang/Exception.printStackTrace:()V
+      19: getstatic     #6                  // Field java/lang/System.out:Ljava/io/PrintStream;
+      22: ldc           #7                  // String Finally
+      24: invokevirtual #8                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      27: goto          41
+      30: astore_1
+      31: getstatic     #6                  // Field java/lang/System.out:Ljava/io/PrintStream;
+      34: ldc           #7                  // String Finally
+      36: invokevirtual #8                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      39: aload_1
+      40: athrow
+      41: return
+    Exception table:
+       from    to  target type
+           0     3    14   Class java/lang/Exception
+           0     3    30   any
+          14    19    30   any
 ```
 
 > 和之前有所不同，这次异常表中，有三条数据，而我们仅仅捕获了一个Exception, 异常表的后两个item的type为any; 上面的三条异常表item的意思为:
@@ -1719,136 +803,49 @@ public
 
 > 再次分析上面的Java代码，finally里面的部分已经被提取到了try部分和catch部分。我们再次调一下代码来看一下
 
-```
-public
-																																									static
-																																									void
-																																									simpleTryCatchFinally
-																																									(
-																																									)
-																																									;
-																																									Code
-																																									:
-																																									//try 部分提取finally代码，如果没有异常发生，则执行输出finally操作，直至goto到41位置，执行返回操作。  
-																																									0
-																																									: invokestatic  #
-																																									3
-																																									// Method testNPE:()V
-																																									3
-																																									: getstatic     #
-																																									6
-																																									// Field java/lang/System.out:Ljava/io/PrintStream;
-																																									6
-																																									: ldc           #
-																																									7
-																																									// String Finally
-																																									8
-																																									: invokevirtual #
-																																									8
-																																									// Method java/io/PrintStream.println:(Ljava/lang/String;)V
-																																									11
-																																									:
-																																									goto
-																																									41
-																																									//catch部分提取finally代码，如果没有异常发生，则执行输出finally操作，直至执行got到41位置，执行返回操作。
-																																									14
-																																									: astore_0
+```bash
+public static void simpleTryCatchFinally();
+    Code:
+      //try 部分提取finally代码，如果没有异常发生，则执行输出finally操作，直至goto到41位置，执行返回操作。  
 
-																																									15
-																																									: aload_0
+       0: invokestatic  #3                  // Method testNPE:()V
+       3: getstatic     #6                  // Field java/lang/System.out:Ljava/io/PrintStream;
+       6: ldc           #7                  // String Finally
+       8: invokevirtual #8                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      11: goto          41
 
-																																									16
-																																									: invokevirtual #
-																																									5
-																																									// Method java/lang/Exception.printStackTrace:()V
-																																									19
-																																									: getstatic     #
-																																									6
-																																									// Field java/lang/System.out:Ljava/io/PrintStream;
-																																									22
-																																									: ldc           #
-																																									7
-																																									// String Finally
-																																									24
-																																									: invokevirtual #
-																																									8
-																																									// Method java/io/PrintStream.println:(Ljava/lang/String;)V
-																																									27
-																																									:
-																																									goto
-																																									41
-																																									//finally部分的代码如果被调用，有可能是try部分，也有可能是catch部分发生异常。
-																																									30
-																																									: astore_1
-
-																																									31
-																																									: getstatic     #
-																																									6
-																																									// Field java/lang/System.out:Ljava/io/PrintStream;
-																																									34
-																																									: ldc           #
-																																									7
-																																									// String Finally
-																																									36
-																																									: invokevirtual #
-																																									8
-																																									// Method java/io/PrintStream.println:(Ljava/lang/String;)V
-																																									39
-																																									: aload_1
-
-																																									40
-																																									: athrow     
-																																									//如果异常没有被catch捕获，而是到了这里，执行完finally的语句后，仍然要把这个异常抛出去，传递给调用处。
-																																									41
-																																									:
-																																									return
+      //catch部分提取finally代码，如果没有异常发生，则执行输出finally操作，直至执行got到41位置，执行返回操作。
+      14: astore_0
+      15: aload_0
+      16: invokevirtual #5                  // Method java/lang/Exception.printStackTrace:()V
+      19: getstatic     #6                  // Field java/lang/System.out:Ljava/io/PrintStream;
+      22: ldc           #7                  // String Finally
+      24: invokevirtual #8                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      27: goto          41
+      //finally部分的代码如果被调用，有可能是try部分，也有可能是catch部分发生异常。
+      30: astore_1
+      31: getstatic     #6                  // Field java/lang/System.out:Ljava/io/PrintStream;
+      34: ldc           #7                  // String Finally
+      36: invokevirtual #8                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      39: aload_1
+      40: athrow     //如果异常没有被catch捕获，而是到了这里，执行完finally的语句后，仍然要把这个异常抛出去，传递给调用处。
+      41: return
 ```
 
 > `Catch先后顺序的问题`
 
 > 我们在代码中的catch的顺序决定了异常处理者在异常表的位置，所以，越是具体的异常要先处理，否则就会出现下面的问题
 
-```
-private
-																																									static
-																																									void
-																																									misuseCatchException
-																																									(
-																																									)
-																																									{
-																																									try
-																																									{
-																																									testNPE
-																																									(
-																																									)
-																																									;
-																																									}
-																																									catch
-																																									(
-																																									Throwable t
-																																									)
-																																									{
-       t
-																																									.
-																																									printStackTrace
-																																									(
-																																									)
-																																									;
-																																									}
-																																									catch
-																																									(
-																																									Exception e
-																																									)
-																																									{
-																																									//error occurs during compilings with tips Exception Java.lang.Exception has already benn caught.
-       e
-																																									.
-																																									printStackTrace
-																																									(
-																																									)
-																																									;
-																																									}
-																																									}
+```java
+private static void misuseCatchException() {
+   try {
+       testNPE();
+   } catch (Throwable t) {
+       t.printStackTrace();
+   } catch (Exception e) { //error occurs during compilings with tips Exception Java.lang.Exception has already benn caught.
+       e.printStackTrace();
+   }
+}
 ```
 
 > 这段代码会导致编译失败，因为先捕获Throwable后捕获Exception，会导致后面的catch永远无法被执行。
@@ -1857,375 +854,103 @@ private
 
 > 这算是我们扩展的一个相对比较极端的问题，就是类似这样的代码，既有return，又有finally，那么finally导致会不会执行
 
-```
-public
-																																									static
-																																									String
-																																									tryCatchReturn
-																																									(
-																																									)
-																																									{
-																																									try
-																																									{
-																																									testNPE
-																																									(
-																																									)
-																																									;
-																																									return
-																																									"OK"
-																																									;
-																																									}
-																																									catch
-																																									(
-																																									Exception e
-																																									)
-																																									{
-																																									return
-																																									"ERROR"
-																																									;
-																																									}
-																																									finally
-																																									{
-																																									System
-																																									.out
-																																									.
-																																									println
-																																									(
-																																									"tryCatchReturn"
-																																									)
-																																									;
-																																									}
-																																									}
+```java
+public static String tryCatchReturn() {
+   try {
+       testNPE();
+       return  "OK";
+   } catch (Exception e) {
+       return "ERROR";
+   } finally {
+       System.out.println("tryCatchReturn");
+   }
+}
 ```
 
 > 答案是finally会执行，那么还是使用上面的方法，我们来看一下为什么finally会执行。
 
-```
-public
-																																									static
-
-																																										java
-																																											.lang
-																																											.
-																																										String
-
-																																									tryCatchReturn
-																																									(
-																																									)
-																																									;
-																																									Code
-																																									:
-																																									0
-																																									: invokestatic  #
-																																									3
-																																									// Method testNPE:()V
-																																									3
-																																									: ldc           #
-																																									6
-																																									// String OK
-																																									5
-																																									: astore_0
-
-																																									6
-																																									: getstatic     #
-																																									7
-																																									// Field java/lang/System.out:Ljava/io/PrintStream;
-																																									9
-																																									: ldc           #
-																																									8
-																																									// String tryCatchReturn
-																																									11
-																																									: invokevirtual #
-																																									9
-																																									// Method java/io/PrintStream.println:(Ljava/lang/String;)V
-																																									14
-																																									: aload_0
-
-																																									15
-																																									: areturn       返回
-																																									OK字符串，areturn意思为
-																																									return a reference from a method
-
-																																									16
-																																									: astore_0
-
-																																									17
-																																									: ldc           #
-																																									10
-																																									// String ERROR
-																																									19
-																																									: astore_1
-
-																																									20
-																																									: getstatic     #
-																																									7
-																																									// Field java/lang/System.out:Ljava/io/PrintStream;
-																																									23
-																																									: ldc           #
-																																									8
-																																									// String tryCatchReturn
-																																									25
-																																									: invokevirtual #
-																																									9
-																																									// Method java/io/PrintStream.println:(Ljava/lang/String;)V
-																																									28
-																																									: aload_1
-
-																																									29
-																																									: areturn  
-																																									//返回ERROR字符串
-																																									30
-																																									: astore_2
-
-																																									31
-																																									: getstatic     #
-																																									7
-																																									// Field java/lang/System.out:Ljava/io/PrintStream;
-																																									34
-																																									: ldc           #
-																																									8
-																																									// String tryCatchReturn
-																																									36
-																																									: invokevirtual #
-																																									9
-																																									// Method java/io/PrintStream.println:(Ljava/lang/String;)V
-																																									39
-																																									: aload_2
-
-																																									40
-																																									: athrow  如果
-																																									catch有未处理的异常，抛出去。
+```bash
+public static java.lang.String tryCatchReturn();
+    Code:
+       0: invokestatic  #3                  // Method testNPE:()V
+       3: ldc           #6                  // String OK
+       5: astore_0
+       6: getstatic     #7                  // Field java/lang/System.out:Ljava/io/PrintStream;
+       9: ldc           #8                  // String tryCatchReturn
+      11: invokevirtual #9                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      14: aload_0
+      15: areturn       返回OK字符串，areturn意思为return a reference from a method
+      16: astore_0
+      17: ldc           #10                 // String ERROR
+      19: astore_1
+      20: getstatic     #7                  // Field java/lang/System.out:Ljava/io/PrintStream;
+      23: ldc           #8                  // String tryCatchReturn
+      25: invokevirtual #9                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      28: aload_1
+      29: areturn  //返回ERROR字符串
+      30: astore_2
+      31: getstatic     #7                  // Field java/lang/System.out:Ljava/io/PrintStream;
+      34: ldc           #8                  // String tryCatchReturn
+      36: invokevirtual #9                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      39: aload_2
+      40: athrow  如果catch有未处理的异常，抛出去。
 ```
 
 ### # 异常是否耗时？为什么会耗时？
 
 > 说用异常慢，首先来看看异常慢在哪里？有多慢？下面的测试用例简单的测试了建立对象、建立异常对象、抛出并接住异常对象三者的耗时对比：
 
-```
-public
-																																									class
-																																									ExceptionTest
-																																									{
-																																									private
-																																									int testTimes
-																																									;
-																																									public
-																																									ExceptionTest
-																																									(
-																																									int testTimes
-																																									)
-																																									{
-																																									this
-																																									.testTimes 
-																																									= testTimes
-																																									;
-																																									}
-																																									public
-																																									void
-																																									newObject
-																																									(
-																																									)
-																																									{
-																																									long l 
-																																									=
-																																									System
-																																									.
-																																									nanoTime
-																																									(
-																																									)
-																																									;
-																																									for
-																																									(
-																																									int i 
-																																									=
-																																									0
-																																									; i 
-																																									< testTimes
-																																									; i
-																																									++
-																																									)
-																																									{
-																																									new
-																																									Object
-																																									(
-																																									)
-																																									;
-																																									}
-																																									System
-																																									.out
-																																									.
-																																									println
-																																									(
-																																									"建立对象："
-																																									+
-																																									(
-																																									System
-																																									.
-																																									nanoTime
-																																									(
-																																									)
-																																									- l
-																																									)
-																																									)
-																																									;
-																																									}
-																																									public
-																																									void
-																																									newException
-																																									(
-																																									)
-																																									{
-																																									long l 
-																																									=
-																																									System
-																																									.
-																																									nanoTime
-																																									(
-																																									)
-																																									;
-																																									for
-																																									(
-																																									int i 
-																																									=
-																																									0
-																																									; i 
-																																									< testTimes
-																																									; i
-																																									++
-																																									)
-																																									{
-																																									new
-																																									Exception
-																																									(
-																																									)
-																																									;
-																																									}
-																																									System
-																																									.out
-																																									.
-																																									println
-																																									(
-																																									"建立异常对象："
-																																									+
-																																									(
-																																									System
-																																									.
-																																									nanoTime
-																																									(
-																																									)
-																																									- l
-																																									)
-																																									)
-																																									;
-																																									}
-																																									public
-																																									void
-																																									catchException
-																																									(
-																																									)
-																																									{
-																																									long l 
-																																									=
-																																									System
-																																									.
-																																									nanoTime
-																																									(
-																																									)
-																																									;
-																																									for
-																																									(
-																																									int i 
-																																									=
-																																									0
-																																									; i 
-																																									< testTimes
-																																									; i
-																																									++
-																																									)
-																																									{
-																																									try
-																																									{
-																																									throw
-																																									new
-																																									Exception
-																																									(
-																																									)
-																																									;
-																																									}
-																																									catch
-																																									(
-																																									Exception e
-																																									)
-																																									{
-																																									}
-																																									}
-																																									System
-																																									.out
-																																									.
-																																									println
-																																									(
-																																									"建立、抛出并接住异常对象："
-																																									+
-																																									(
-																																									System
-																																									.
-																																									nanoTime
-																																									(
-																																									)
-																																									- l
-																																									)
-																																									)
-																																									;
-																																									}
-																																									public
-																																									static
-																																									void
-																																									main
-																																									(
-																																									String
-																																									[
-																																									] args
-																																									)
-																																									{
-																																									ExceptionTest test 
-																																									=
-																																									new
-																																									ExceptionTest
-																																									(
-																																									10000
-																																									)
-																																									;  
-        test
-																																									.
-																																									newObject
-																																									(
-																																									)
-																																									;  
-        test
-																																									.
-																																									newException
-																																									(
-																																									)
-																																									;  
-        test
-																																									.
-																																									catchException
-																																									(
-																																									)
-																																									;
-																																									}
-																																									}
+```java
+public class ExceptionTest {  
+
+    private int testTimes;  
+
+    public ExceptionTest(int testTimes) {  
+        this.testTimes = testTimes;  
+    }  
+
+    public void newObject() {  
+        long l = System.nanoTime();  
+        for (int i = 0; i < testTimes; i++) {  
+            new Object();  
+        }  
+        System.out.println("建立对象：" + (System.nanoTime() - l));  
+    }  
+
+    public void newException() {  
+        long l = System.nanoTime();  
+        for (int i = 0; i < testTimes; i++) {  
+            new Exception();  
+        }  
+        System.out.println("建立异常对象：" + (System.nanoTime() - l));  
+    }  
+
+    public void catchException() {  
+        long l = System.nanoTime();  
+        for (int i = 0; i < testTimes; i++) {  
+            try {  
+                throw new Exception();  
+            } catch (Exception e) {  
+            }  
+        }  
+        System.out.println("建立、抛出并接住异常对象：" + (System.nanoTime() - l));  
+    }  
+
+    public static void main(String[] args) {  
+        ExceptionTest test = new ExceptionTest(10000);  
+        test.newObject();  
+        test.newException();  
+        test.catchException();  
+    }  
+}
 ```
 
 > 运行结果：
 
-```
-建立对象：
-																																									575817  
-建立异常对象：
-																																									9589080  
-建立、抛出并接住异常对象：
-																																									47394475
+```java
+建立对象：575817  
+建立异常对象：9589080  
+建立、抛出并接住异常对象：47394475
 ```
 
 > 建立一个异常对象，是建立一个普通Object耗时的约20倍（实际上差距会比这个数字更大一些，因为循环也占用了时间，追求精确的读者可以再测一下空循环的耗时然后在对比前减掉这部分），而抛出、接住一个异常对象，所花费时间大约是建立异常对象的4倍。
@@ -2241,4 +966,6 @@ public
 *   https://blog.csdn.net/ThinkWon/article/details/101681073
 *   https://www.cnblogs.com/skywang12345/p/3544287.html
 *   https://www.codercto.com/a/33350.html
+
+
 
