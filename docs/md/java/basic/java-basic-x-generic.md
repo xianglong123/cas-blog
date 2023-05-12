@@ -43,7 +43,7 @@ Java泛型这个特性是从JDK 1.5才开始加入的，因此为了兼容之前
 
 > 我们通过一个例子来阐述，先看下下面的代码：
 
-```
+```java
 private static int add(int a, int b) {
     System.out.println(a + "+" + b + "=" + (a + b));
     return a + b;
@@ -62,7 +62,7 @@ private static double add(double a, double b) {
 
 > 如果没有泛型，要实现不同类型的加法，每种类型都需要重载一个add方法；通过泛型，我们可以复用为一个方法：
 
-```
+```java
 private static <T extends Number> double add(T a, T b) {
     System.out.println(a + "+" + b + "=" + (a.doubleValue() + b.doubleValue()));
     return a.doubleValue() + b.doubleValue();
@@ -73,7 +73,7 @@ private static <T extends Number> double add(T a, T b) {
 
 > 看下这个例子：
 
-```
+```java
 List list = new ArrayList();
 list.add("xxString");
 list.add(100d);
@@ -82,7 +82,7 @@ list.add(new Person());
 
 > 我们在使用上述list中，list中的元素都是Object类型（无法约束其中的类型），所以在取出集合元素时需要人为的强制类型转化到具体的目标类型，且很容易出现
 
-```
+```java
 java.lang.ClassCastException
 ```
 
@@ -90,7 +90,7 @@ java.lang.ClassCastException
 
 > 引入泛型，它将提供类型的约束，提供编译前的检查：
 
-```
+```java
 List<String> list = new ArrayList<String>();
 
 // list中只能放String, 不能放其它类型的元素
@@ -106,7 +106,7 @@ List<String> list = new ArrayList<String>();
 
 *   从一个简单的泛型类看起：
 
-```
+```java
 class Point<T>{         // 此处可以随便写标识符号，T是type的简称  
     private T var ;     // var的类型由T指定，即：由外部指定  
     public T getVar(){  // 返回值的类型由外部决定  
@@ -127,7 +127,7 @@ public class GenericsDemo06{
 
 *   多元泛型
 
-```
+```java
 class Notepad<K,V>{       // 此处指定了两个泛型类型  
     private K key ;     // 此变量的类型由外部决定  
     private V value ;   // 此变量的类型由外部决定  
@@ -161,7 +161,7 @@ public class GenericsDemo09{
 
 *   简单的泛型接口
 
-```
+```java
 interface Info<T>{        // 在接口上定义泛型  
     public T getVar() ; // 定义抽象方法，抽象方法的返回值就是泛型类型  
 }  
@@ -192,11 +192,11 @@ public class GenericsDemo24{
 
 *   定义泛型方法语法格式
 
-> ![](./Java 基础 - 泛型机制详解 _ Java 全栈知识体系_files/java-basic-generic-4.png)
+> ![](images/java-basic-generic-4.png)
 
 *   调用泛型方法语法格式
 
-> ![](./Java 基础 - 泛型机制详解 _ Java 全栈知识体系_files/java-basic-generic-5.png)
+> ![](images/java-basic-generic-5.png)
 
 > 说明一下，定义泛型方法时，必须在返回值前边加一个`<T>`，来声明这是一个泛型方法，持有一个泛型`T`，然后才可以用泛型T作为方法的返回值。
 
@@ -214,7 +214,7 @@ public class GenericsDemo24{
 
 *   `先看下如下的代码，很明显是会报错的` （具体错误原因请参考后文）。
 
-```
+```java
 class A{}
 class B extends A {}
 
@@ -241,7 +241,7 @@ public static void funD(List<B> listB) {
 
 > 为了解决泛型中隐含的转换问题，Java泛型加入了类型参数的上下边界机制。`<? extends A>`表示该类型参数可以是A(上边界)或者A的子类类型。编译时擦除到类型A，即用A类型代替类型参数。这种方法可以解决开始遇到的问题，编译器知道类型参数的范围，如果传入的实例类型B是在这个范围内的话允许转换，这时只要一次类型转换就可以了，运行时会把对象当做A的实例看待。
 
-```
+```java
 public static void funC(List<? extends A> listA) {
     // ...          
 }
@@ -257,7 +257,7 @@ public static void funD(List<B> listB) {
 
 > 上限
 
-```
+```java
 class Info<T extends Number>{    // 此处泛型只能是数字类型
     private T var ;        // 定义泛型变量
     public void setVar(T var){
@@ -279,7 +279,7 @@ public class demo1{
 
 > 下限
 
-```
+```java
 class Info<T>{
     private T var ;        // 定义泛型变量
     public void setVar(T var){
@@ -309,7 +309,7 @@ public class GenericsDemo21{
 
 > `小结`
 
-```
+```java
 <?> 无限制通配符
 <? extends E> extends 关键字声明了类型的上界，表示参数化的类型可能是所指定的类型，或者是此类型的子类
 <? super E> super 关键字声明了类型的下界，表示参数化的类型可能是指定的类型，或者是此类型的父类
@@ -323,7 +323,7 @@ public class GenericsDemo21{
 
 *   再看一个实际例子，`加深印象`
 
-```
+```java
 private  <E extends Comparable<? super E>> E max(List<? extends E> e1) {
     if (e1 == null){
         return null;
@@ -343,7 +343,7 @@ private  <E extends Comparable<? super E>> E max(List<? extends E> e1) {
 
 > 上述代码中的类型参数 E 的范围是
 
-```
+```java
 <E extends Comparable<? super E>>
 ```
 
@@ -351,13 +351,13 @@ private  <E extends Comparable<? super E>> E max(List<? extends E> e1) {
 
 *   > 要进行比较，所以 E 需要是可比较的类，因此需要
 
-    ```
+    ```java
     extends Comparable<…>
     ```
 
     （注意这里不要和继承的 `extends` 搞混了，不一样）
 
-*   > ```
+*   > ```java
     Comparable< ? super E>
     ```
 
@@ -369,7 +369,7 @@ private  <E extends Comparable<? super E>> E max(List<? extends E> e1) {
 
 > 使用&符号
 
-```
+```java
 public class Client {
     //工资低于2500元的上斑族并且站立的乘客车票打8折
     public static <T extends Staff & Passenger> void discount(T t){
@@ -389,7 +389,7 @@ public class Client {
 
 > 首先，我们泛型数组相关的申明：
 
-```
+```java
 List<String>[] list11 = new ArrayList<String>[10]; //编译错误，非法创建 
 List<String>[] list12 = new ArrayList<?>[10]; //编译错误，需要强转类型 
 List<String>[] list13 = (List<String>[]) new ArrayList<?>[10]; //OK，但是会有警告 
@@ -402,7 +402,7 @@ List<String>[] list6 = new ArrayList[10]; //OK，但是会有警告
 
 *   讨巧的使用场景
 
-```
+```java
 public class GenericsDemo30{  
     public static void main(String args[]){  
         Integer i[] = fun1(1,2,3,4,5,6) ;   // 返回泛型数组  
@@ -422,7 +422,7 @@ public class GenericsDemo30{
 
 *   合理使用
 
-```
+```java
 public ArrayWithTypeToken(Class<T> type, int size) {
     array = (T[]) Array.newInstance(type, size);
 }
@@ -455,19 +455,19 @@ public ArrayWithTypeToken(Class<T> type, int size) {
 
 > 当类定义中的类型参数没有任何限制时，在类型擦除中直接被替换为Object，即形如`<T>`和`<?>`的类型参数都被替换为Object。
 
-> ![](./Java 基础 - 泛型机制详解 _ Java 全栈知识体系_files/java-basic-generic-1.png)
+> ![](images/java-basic-generic-1.png)
 
 *   擦除类定义中的类型参数 - 有限制类型擦除
 
 > 当类定义中的类型参数存在限制（上下界）时，在类型擦除中替换为类型参数的上界或者下界，比如形如`<T extends Number>`和`<? extends Number>`的类型参数被替换为`Number`，`<? super Number>`被替换为Object。
 
-> ![](./Java 基础 - 泛型机制详解 _ Java 全栈知识体系_files/java-basic-generic-2.png)
+> ![](images/java-basic-generic-2.png)
 
 *   擦除方法定义中的类型参数
 
 > 擦除方法定义中的类型参数原则和擦除类定义中的类型参数是一样的，这里仅以擦除方法定义中的有限制类型参数为例。
 
-> ![](./Java 基础 - 泛型机制详解 _ Java 全栈知识体系_files/java-basic-generic-3.png)
+> ![](images/java-basic-generic-3.png)
 
 ### # 如何证明类型的擦除呢？
 
@@ -475,7 +475,7 @@ public ArrayWithTypeToken(Class<T> type, int size) {
 
 *   原始类型相等
 
-```
+```java
 public class Test {
 
     public static void main(String[] args) {
@@ -495,7 +495,7 @@ public class Test {
 
 *   通过反射添加其它类型元素
 
-```
+```java
 public class Test {
 
     public static void main(String[] args) throws Exception {
@@ -524,7 +524,7 @@ public class Test {
 
 *   原始类型Object
 
-```
+```java
 class Pair<T> {  
     private T value;  
     public T getValue() {  
@@ -538,7 +538,7 @@ class Pair<T> {
 
 > Pair的原始类型为:
 
-```
+```java
 class Pair {  
     private Object value;  
     public Object getValue() {  
@@ -558,7 +558,7 @@ class Pair {
 
 > 比如: Pair这样声明的话
 
-```
+```java
 public class Pair<T extends Comparable> {}
 ```
 
@@ -571,7 +571,7 @@ public class Pair<T extends Comparable> {}
 *   在不指定泛型的情况下，泛型变量的类型为该方法中的几种类型的同一父类的最小级，直到Object
 *   在指定泛型的情况下，该方法的几种类型必须是该泛型的实例的类型或者其子类
 
-```
+```java
 public class Test {  
     public static void main(String[] args) {  
 
@@ -597,7 +597,7 @@ public class Test {
 
 *   Object泛型
 
-```
+```java
 public static void main(String[] args) {  
     ArrayList list = new ArrayList();  
     list.add(1);  
@@ -614,7 +614,7 @@ public static void main(String[] args) {
 
 > 例如：
 
-```
+```java
 public static  void main(String[] args) {  
 
     ArrayList<String> list = new ArrayList<String>();  
@@ -629,19 +629,19 @@ public static  void main(String[] args) {
 
 > 以 ArrayList举例子，以前的写法:
 
-```
+```java
 ArrayList list = new ArrayList();
 ```
 
 > 现在的写法:
 
-```
+```java
 ArrayList<String> list = new ArrayList<String>();
 ```
 
 > 如果是与以前的代码兼容，各种引用传值之间，必然会出现如下的情况：
 
-```
+```java
 ArrayList<String> list1 = new ArrayList(); //第一种 情况
 ArrayList list2 = new ArrayList<String>(); //第二种 情况
 ```
@@ -654,7 +654,7 @@ ArrayList list2 = new ArrayList<String>(); //第二种 情况
 
 > 举例子：
 
-```
+```java
 public class Test {  
 
     public static void main(String[] args) {  
@@ -683,14 +683,14 @@ public class Test {
 
 > 在Java中，像下面形式的引用传递是不允许的:
 
-```
+```java
 ArrayList<String> list1 = new ArrayList<Object>(); //编译错误  
 ArrayList<Object> list2 = new ArrayList<String>(); //编译错误
 ```
 
 *   我们先看第一种情况，将第一种情况拓展成下面的形式：
 
-```
+```java
 ArrayList<Object> list1 = new ArrayList<Object>();  
 listadd(new Object());  
 listadd(new Object());  
@@ -701,7 +701,7 @@ ArrayList<String> list2 = list1; //编译错误
 
 *   再看第二种情况，将第二种情况拓展成下面的形式：
 
-```
+```java
 ArrayList<String> list1 = new ArrayList<String>();  
 listadd(new String());  
 listadd(new String());
@@ -721,7 +721,7 @@ ArrayList<Object> list2 = list1; //编译错误
 
 > 现在有这样一个泛型类：
 
-```
+```java
 class Pair<T> {  
 
     private T value;  
@@ -738,7 +738,7 @@ class Pair<T> {
 
 > 然后我们想要一个子类继承它。
 
-```
+```java
 class DateInter extends Pair<Date> {  
 
     @Override  
@@ -755,7 +755,7 @@ class DateInter extends Pair<Date> {
 
 > 在这个子类中，我们设定父类的泛型类型为`Pair<Date>`，在子类中，我们覆盖了父类的两个方法，我们的原意是这样的：将父类的泛型类型限定为Date，那么父类里面的两个方法的参数都为Date类型。
 
-```
+```java
 public Date getValue() {  
     return value;  
 }  
@@ -769,7 +769,7 @@ public void setValue(Date value) {
 
 > 分析：实际上，类型擦除后，父类的的泛型类型全部变为了原始类型Object，所以父类编译之后会变成下面的样子：
 
-```
+```java
 class Pair {  
     private Object value;  
 
@@ -785,7 +785,7 @@ class Pair {
 
 > 再看子类的两个重写的方法的类型：
 
-```
+```java
 @Override  
 public void setValue(Date value) {  
     super.setValue(value);  
@@ -798,7 +798,7 @@ public Date getValue() {
 
 > 先来分析setValue方法，父类的类型是Object，而子类的类型是Date，参数类型不一样，这如果实在普通的继承关系中，根本就不会是重写，而是重载。 我们在一个main方法测试一下：
 
-```
+```java
 public static void main(String[] args) throws ClassNotFoundException {  
         DateInter dateInter = new DateInter();  
         dateInter.setValue(new Date());                  
@@ -812,7 +812,7 @@ public static void main(String[] args) throws ClassNotFoundException {
 
 > 原因是这样的，我们传入父类的泛型类型是Date，`Pair<Date>`，我们的本意是将泛型类变为如下：
 
-```
+```java
 class Pair {  
     private Date value;  
     public Date getValue() {  
@@ -832,7 +832,7 @@ class Pair {
 
 > 首先，我们用javap -c className的方式反编译下DateInter子类的字节码，结果如下：
 
-```
+```java
 class com.tao.test.DateInter extends com.tao.test.Pair<java.util.Date> {  
   com.tao.test.DateInter();  
     Code:  
@@ -882,7 +882,7 @@ class com.tao.test.DateInter extends com.tao.test.Pair<java.util.Date> {
 
 > 那么父类的getValue方法如下：
 
-```
+```java
 public Object getValue() {  
     return super.getValue();  
 }
@@ -890,7 +890,7 @@ public Object getValue() {
 
 > 而子类重写的方法是：
 
-```
+```java
 public Date getValue() {  
     return super.getValue();  
 }
@@ -914,13 +914,13 @@ public Date getValue() {
 
 > 我们可以看到如下代码会在编译器中报错：
 
-```
+```java
 T test = new T(); // ERROR
 ```
 
 > 因为在 Java 编译期没法确定泛型参数化类型，也就找不到对应的类字节码文件，所以自然就不行了，此外由于`T` 被擦除为 `Object`，如果可以 `new T()` 则就变成了 `new Object()`，失去了本意。     如果我们确实需要实例化一个泛型，应该如何做呢？可以通过反射实现：
 
-```
+```java
 static <T> T newTclass (Class < T > clazz) throws InstantiationException, IllegalAccessException {
     T obj = clazz.newInstance();
     return obj;
@@ -931,7 +931,7 @@ static <T> T newTclass (Class < T > clazz) throws InstantiationException, Illega
 
 > 我们先来看下Oracle官网提供的一个例子：
 
-```
+```java
 List<String>[] lsa = new List<String>[10]; // Not really allowed.
 Object o = lsa;
 Object[] oa = (Object[]) o;
@@ -945,7 +945,7 @@ String s = lsa[1].get(0); // Run-time error ClassCastException.
 
 > 而对于下面的代码来说是成立的：
 
-```
+```java
 List<?>[] lsa = new List<?>[10]; // OK, array of unbounded wildcard type.
 Object o = lsa;
 Object[] oa = (Object[]) o;
@@ -961,7 +961,7 @@ Integer i = (Integer) lsa[1].get(0); // OK
 
 > 更进一步的，我们看看如下的代码：
 
-```
+```java
 List<String>[] list11 = new ArrayList<String>[10]; //编译错误，非法创建 
 List<String>[] list12 = new ArrayList<?>[10]; //编译错误，需要强转类型 
 List<String>[] list13 = (List<String>[]) new ArrayList<?>[10]; //OK，但是会有警告 
@@ -978,13 +978,13 @@ List<String>[] list6 = new ArrayList[10]; //OK，但是会有警告
 
 > 我们在使用到泛型数组的场景下应该尽量使用列表集合替换，此外也可以通过使用
 
-```
+```java
 java.lang.reflect.Array.newInstance(Class<T> componentType, int length)
 ```
 
 方法来创建一个具有指定类型和维度的数组，如下：
 
-```
+```java
 public class ArrayWithTypeToken<T> {
     private T[] array;
 
@@ -1018,7 +1018,7 @@ Integer[] array = arrayToken.create();
 
 > 举例说明：
 
-```
+```java
 public class Test2<T> {    
     public static T one;   //编译错误    
     public static  T show(T one){ //编译错误    
@@ -1031,7 +1031,7 @@ public class Test2<T> {
 
 > 但是要注意区分下面的一种情况：
 
-```
+```java
 public class Test2<T> {    
 
     public static <T >T show(T one){ //这是正确的    
@@ -1046,7 +1046,7 @@ public class Test2<T> {
 
 *   `不能抛出也不能捕获泛型类的对象`。事实上，泛型类扩展Throwable都不合法。例如：下面的定义将不会通过编译：
 
-```
+```java
 public class Problem<T> extends Exception {
 
 }
@@ -1054,7 +1054,7 @@ public class Problem<T> extends Exception {
 
 > 为什么不能扩展Throwable，因为异常都是在运行时捕获和抛出的，而在编译的时候，泛型信息全都会被擦除掉，那么，假设上面的编译可行，那么，在看下面的定义：
 
-```
+```java
 try{
 
 } catch(Problem<Integer> e1) {
@@ -1066,7 +1066,7 @@ try{
 
 > 类型信息被擦除后，那么两个地方的catch都变为原始类型Object，那么也就是说，这两个地方的catch变的一模一样,就相当于下面的这样
 
-```
+```java
 try{
 
 } catch(Problem<Object> e1) {
@@ -1080,7 +1080,7 @@ try{
 
 *   `不能再catch子句中使用泛型变量`
 
-```
+```java
 public static <T extends Throwable> void doWork(Class<T> t) {
     try {
         ...
@@ -1092,7 +1092,7 @@ public static <T extends Throwable> void doWork(Class<T> t) {
 
 > 因为泛型信息在编译的时候已经变为原始类型，也就是说上面的T会变为原始类型Throwable，那么如果可以再catch子句中使用泛型变量，那么，下面的定义呢：
 
-```
+```java
 public static <T extends Throwable> void doWork(Class<T> t){
     try {
 
@@ -1106,13 +1106,13 @@ public static <T extends Throwable> void doWork(Class<T> t){
 
 > 根据异常捕获的原则，一定是子类在前面，父类在后面，那么上面就违背了这个原则。即使你在使用该静态方法的使用T是
 
-```
+```java
 ArrayIndexOutofBounds
 ```
 
 ，在编译之后还是会变成Throwable，
 
-```
+```java
 ArrayIndexOutofBounds
 ```
 
@@ -1120,7 +1120,7 @@ ArrayIndexOutofBounds
 
 *   但是在异常声明中可以使用类型变量。下面方法是合法的。
 
-```
+```java
 public static<T extends Throwable> void doWork(T t) throws T {
     try{
         ...
@@ -1138,19 +1138,19 @@ public static<T extends Throwable> void doWork(T t) throws T {
 
 > > 既然类型被擦除了，那么如何获取泛型的参数类型呢？可以通过反射（
 >
-> ```
+> ```java
 > java.lang.reflect.Type
 > ```
 >
 > ）获取泛型
 
-> ```
+> ```java
 java.lang.reflect.Type
 ```
 
 是Java中所有类型的公共高级接口, 代表了Java中的所有类型. Type体系中类型的包括：数组类型(GenericArrayType)、参数化类型(ParameterizedType)、类型变量(TypeVariable)、通配符类型(WildcardType)、原始类型(Class)、基本类型(Class), 以上这些类型都实现Type接口。
 
-```
+```java
 public class GenericType<T> {
 private T data;
 
@@ -1174,7 +1174,7 @@ private T data;
 
 > 其中 `ParameterizedType`:
 
-```
+```java
 public interface ParameterizedType extends Type {
 // 返回确切的泛型参数, 如Map<String, Integer>返回[String, Integer]
 Type[] getActualTypeArguments();

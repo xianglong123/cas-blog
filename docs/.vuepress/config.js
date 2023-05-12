@@ -15,7 +15,8 @@ module.exports = {
         lineNumbers: true, // 代码块是否显示行号
         extendMarkdown: md => {
             md.use(require("markdown-it-disable-url-encode"));
-        }
+        },
+        toc: { includeLevel: [3, 4] }
     },
     themeConfig: {
         nav: [ // 导航栏配置
@@ -308,7 +309,11 @@ module.exports = {
                 },
             ]
         }],
-        ['vuepress-plugin-anchor-right'],
         ['@vuepress/medium-zoom'], // 图片放大
+        ['@vuepress/active-header-links', {
+            sidebarLinkSelector: '.sidebar-link',
+            headerAnchorSelector: '.header-anchor',
+        }],
+        ['@vuepress/last-updated'],
     ]
 };
