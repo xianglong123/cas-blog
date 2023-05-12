@@ -23,9 +23,10 @@
     "vuepress-plugin-ribbon-animation": "^1.1.3"
   },
   "devDependencies": {
-    "@vuepress/plugin-active-header-links": "^1.9.9",
+    "@vssue/vuepress-plugin-vssue": "^1.4.8",
     "@vuepress/plugin-last-updated": "^1.9.9",
     "@vuepress/plugin-medium-zoom": "^1.9.9",
+    "vuepress-plugin-sakura": "^1.2.1",
     "vuepress-theme-reco": "^1.6.17"
   }
 }
