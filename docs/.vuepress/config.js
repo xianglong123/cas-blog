@@ -317,13 +317,15 @@ module.exports = {
             zIndex: 2,
             img: {
                 replace: false, // false 默认图 true 换图 需要填写httpUrl地址
-                httpUrl: 'http://www.zpzpup.com/assets/image/sakura.png' // 绝对路径
+                httpUrl: [
+                    'http://www.zpzpup.com/assets/image/sakura.png'
+                ] // 绝对路径
             }
         }],
         ['@vssue/vuepress-plugin-vssue', {
             platform: 'github',
             owner: 'xianglong123',
-            repo: 'blogComment',
+            repo: 'cas-blog-comment',
             clientId: '66f3d4d16971e6f68e8a',
             clientSecret: '139f86b03693f2a6fd0569058b620b6d2d32e25e',
         }],

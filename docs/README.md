@@ -4,7 +4,7 @@ home: true
 heroText: 123的个人主页
 tagline: 先从java开始写（工作4年了）
 actionText: 快速上手 →
-actionLink: guide.html
+actionLink: /md/java/basic/java-basic-oop.html
 heroImage: /images/photo.jpg
 background-image: /gif/4b2b871138f.gif;
 
@@ -35,6 +35,8 @@ this is a tip
 
 ``` js
 <script>
-	console.log('Hello world')
+	console.log('欢迎访问我的首页，如果你也想加入维护这个文档，请邮件我加入-1391086179@qq.com')
 </script>
 ```
+
+<Vssue title="Home" />
