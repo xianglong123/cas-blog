@@ -32,7 +32,7 @@ ava I/O 使用了装饰者模式来实现。 @123
 
 > 实例化一个具有缓存功能的字节流对象时，只需要在 FileInputStream 对象上再套一层 BufferedInputStream 对象即可。
 
-```
+```java
 FileInputStream fileInputStream = new FileInputStream(filePath);
 BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
 ```

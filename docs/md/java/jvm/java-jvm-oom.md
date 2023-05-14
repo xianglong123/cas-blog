@@ -109,7 +109,7 @@ Process finished with exit code 1
 
 java.lang.OutOfMemoryError: Java heap space
 
-```
+```java
 
 
 表示堆内存溢出。
@@ -124,7 +124,7 @@ java.lang.OutOfMemoryError: Java heap space
 > PS：-Xmx最大内存配置2GB
 
 
-```java
+```
 
 public void testOom1() {
 
@@ -146,7 +146,7 @@ mapList.add(map);
 
 }
 
-```
+```java
 
 
 > 上述的代码执行会：old区占用过多导致频繁Full GC，最终导致GC overhead limit exceed。

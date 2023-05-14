@@ -33,7 +33,7 @@ title: Java IO - 源码:InputStream
 
 > InputStream 类重要方法设计如下：
 
-```
+```java
 // 读取下一个字节，如果没有则返回-1
 public abstract int read() 
 
@@ -82,7 +82,7 @@ public long transferTo(OutputStream out)
 
 > InputStream抽象类源码如下：
 
-```
+```java
 public abstract class InputStream implements Closeable {
 
     // 当使用skip方法时，最大的buffer size大小
@@ -359,7 +359,7 @@ public abstract class InputStream implements Closeable {
 *   `readNBytes`： 从 InputStream 中读取指定数量的字节到数组中。
 *   `transferTo`：读取 InputStream 中的全部字节并写入到指定的 OutputStream 中 。
 
-```
+```java
 public class TestInputStream {
     private InputStream inputStream;
     private static final String CONTENT = "Hello World";
@@ -390,13 +390,13 @@ public class TestInputStream {
 
 *   `
 
-    ```
+    ```java
     read(byte[], int, int)
     ```
 
     和
 
-    ```
+    ```java
     readNBytes(byte[], int, int)
     ```
 
@@ -415,7 +415,7 @@ public class TestInputStream {
 
 > 举个例子：
 
-```
+```java
 public class MyParser implements Parser {
   private static Action NO_ACTION = new Action() {
     public void doSomething() { /* do nothing */ }
@@ -432,7 +432,7 @@ public class MyParser implements Parser {
 
 > 然后便`可以始终可以这么调用，而不用再判断空了`
 
-```
+```java
 ParserFactory.getParser().findAction(someInput).doSomething();
 ```
 
@@ -440,7 +440,7 @@ ParserFactory.getParser().findAction(someInput).doSomething();
 
 > FilterInputStream 源码如下
 
-```
+```java
 public class FilterInputStream extends InputStream {
 
     // 被装饰的inputStream
@@ -490,7 +490,7 @@ public class FilterInputStream extends InputStream {
 
 > ByteArrayInputStream源码如下
 
-```
+```java
 public class ByteArrayInputStream extends InputStream {
 
     // 内部保存的byte 数组
@@ -594,7 +594,7 @@ public class ByteArrayInputStream extends InputStream {
 
 > BufferedInputStream源码如下
 
-```
+```java
 public class BufferedInputStream extends FilterInputStream {
 
     // 默认的buffer大小

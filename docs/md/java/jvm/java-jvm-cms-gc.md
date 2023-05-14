@@ -200,7 +200,7 @@ title: GC - Java 垃圾回收器之CMS GC问题分析与解决
 
 *   > `ParNew`： 一款多线程的收集器，采用复制算法，主要工作在 Young 区，可以通过
 
-    ```
+    ```java
     -XX:ParallelGCThreads
     ```
 

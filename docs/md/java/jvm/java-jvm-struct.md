@@ -170,7 +170,7 @@ title: JVM 基础 - JVM 内存结构
 *   由于局部变量表是建立在线程的栈上，是线程的私有数据，因此`不存在数据安全问题`
 *   `局部变量表所需要的容量大小是编译期确定下来的`，并保存在方法的 Code 属性的
 
-    ```
+    ```java
     maximum local variables
     ```
 
@@ -396,7 +396,7 @@ title: JVM 基础 - JVM 内存结构
 
 > 可以通过代码获取到我们的设置值，当然也可以模拟 OOM：
 
-```
+```java
 public static void main(String[] args) {
 
   //返回 JVM 堆大小

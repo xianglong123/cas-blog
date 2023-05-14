@@ -31,7 +31,7 @@ title: Java NIO - 零拷贝实现
 
 > 堆外内存（DirectBuffer）在使用后需要应用程序手动回收，而堆内存（HeapBuffer）的数据在 GC 时可能会被自动回收。因此，在使用 HeapBuffer 读写数据时，为了避免缓冲区数据因为 GC 而丢失，NIO 会先把 HeapBuffer 内部的数据拷贝到一个临时的 DirectBuffer 中的本地内存（native memory），这个拷贝涉及到
 
-```
+```java
 sun.misc.Unsafe.copyMemory()
 ```
 
@@ -41,7 +41,7 @@ sun.misc.Unsafe.copyMemory()
 
 > MappedByteBuffer 是 NIO 基于**内存映射（mmap）**这种零拷贝方式的提供的一种实现，它继承自 ByteBuffer。FileChannel 定义了一个 map() 方法，它可以把一个文件从 position 位置开始的 size 大小的区域映射为内存映像文件。抽象方法 map() 方法在 FileChannel 中的定义如下：
 
-```
+```java
 public abstract MappedByteBuffer map(MapMode mode, long position, long size)
         throws IOException;
 ```
@@ -58,7 +58,7 @@ public abstract MappedByteBuffer map(MapMode mode, long position, long size)
 
 > 下面给出一个利用 MappedByteBuffer 对文件进行读写的使用示例：
 
-```
+```java
 private final static String CONTENT = "Zero copy implemented by MappedByteBuffer";
 private final static String FILE_NAME = "/mmap.txt";
 private final static String CHARSET = "UTF-8";
@@ -66,7 +66,7 @@ private final static String CHARSET = "UTF-8";
 
 *   `写文件数据`：打开文件通道 fileChannel 并提供读权限、写权限和数据清空权限，通过 fileChannel 映射到一个可写的内存缓冲区 mappedByteBuffer，将目标数据写入 mappedByteBuffer，通过 `force()` 方法把缓冲区更改的内容强制写入本地文件。
 
-```
+```java
 @Test
 public void writeToFileByMappedByteBuffer() {
     Path path = Paths.get(getClass().getResource(FILE_NAME).getPath());
@@ -86,7 +86,7 @@ public void writeToFileByMappedByteBuffer() {
 
 *   `读文件数据`：打开文件通道 fileChannel 并提供只读权限，通过 fileChannel 映射到一个只可读的内存缓冲区 mappedByteBuffer，读取 mappedByteBuffer 中的字节数组即可得到文件数据。
 
-```
+```java
 @Test
 public void readFromFileByMappedByteBuffer() {
     Path path = Paths.get(getClass().getResource(FILE_NAME).getPath());
@@ -107,19 +107,19 @@ public void readFromFileByMappedByteBuffer() {
 
 > 下面介绍 `map()` 方法的`底层实现原理`。`map()` 方法是
 
-```
+```java
 java.nio.channels.FileChannel
 ```
 
 的抽象方法，由子类
 
-```
+```java
 sun.nio.ch.FileChannelImpl.java
 ```
 
 实现，下面是和内存映射相关的核心代码：
 
-```
+```java
 public MappedByteBuffer map(MapMode mode, long position, long size) throws IOException {
     int pagePosition = (int)(position % allocationGranularity);
     long mapPosition = position - pagePosition;
@@ -157,19 +157,19 @@ public MappedByteBuffer map(MapMode mode, long position, long size) throws IOExc
 
 > `map()` 方法返回的是内存映射区域的起始地址，通过（`起始地址 + 偏移量`）就可以获取指定内存的数据。这样一定程度上替代了 `read()` 或 `write()` 方法，底层直接采用 `sun.misc.Unsafe`类的 `getByte()` 和 `putByte()` 方法对数据进行读写。
 
-```
+```java
 private native long map0(int prot, long position, long mapSize) throws IOException;
 ```
 
 > 上面是本地方法（native method）map0 的定义，它通过 JNI（Java Native Interface）调用底层 C 的实现，这个 native 函数（Java_sun_nio_ch_FileChannelImpl_map0）的实现位于 JDK 源码包下的
 
-```
+```java
 native/sun/nio/ch/FileChannelImpl.c
 ```
 
 这个源文件里面。
 
-```
+```java
 JNIEXPORT jlong JNICALL
 Java_sun_nio_ch_FileChannelImpl_map0(JNIEnv *env, jobject this,
                                      jint prot, jlong off, jlong len)
@@ -213,7 +213,7 @@ Java_sun_nio_ch_FileChannelImpl_map0(JNIEnv *env, jobject this,
 
 > 可以看出 map0() 函数最终是通过 `mmap64()` 这个函数对 Linux 底层内核发出内存映射的调用， `mmap64()` 函数的原型如下：
 
-```
+```java
 #include <sys/mman.h>
 
 void *mmap64(void *addr, size_t len, int prot, int flags, int fd, off64_t offset);
@@ -241,7 +241,7 @@ void *mmap64(void *addr, size_t len, int prot, int flags, int fd, off64_t offset
 *   `MappedByteBuffer 在处理大文件时性能的确很高，但也存内存占用、文件关闭不确定等问题`，被其打开的文件只有在垃圾回收的才会被关闭，而且这个时间点是不确定的。
 *   MappedByteBuffer 提供了文件映射内存的 mmap() 方法，也提供了释放映射内存的 unmap() 方法。然而 unmap() 是 FileChannelImpl 中的私有方法，无法直接显示调用。因此，`用户程序需要通过 Java 反射的调用 sun.misc.Cleaner 类的 clean() 方法手动释放映射占用的内存区域`。
 
-```
+```java
 public static void clean(final Object buffer) throws Exception {
     AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
         try {

@@ -39,13 +39,13 @@ Java 堆外内存分析相对来说是复杂的，美团技术团队的Spring Bo
 
 > 笔者在项目中添加
 
-```
+```java
 -XX:NativeMemoryTracking=detailJVM
 ```
 
 参数重启项目，使用命令
 
-```
+```java
 jcmd pid VM.native_memory detail
 ```
 
@@ -136,19 +136,19 @@ jcmd pid VM.native_memory detail
 
 > 为了验证是内存池搞的鬼，笔者就简单写个不带内存池的内存分配器。使用命令
 
-```
+```java
 gcc zjbmalloc.c -fPIC -shared -o zjbmalloc.so
 ```
 
 生成动态库，然后使用
 
-```
+```java
 export LD_PRELOAD=zjbmalloc.so
 ```
 
 替换掉glibc的内存分配器。其中代码Demo如下：
 
-```
+```java
 #include<sys/mman.h>
 #include<stdlib.h>
 #include<string.h>

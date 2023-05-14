@@ -55,7 +55,7 @@ title: JVM 基础 - 类字节码详解
 
 > 下面以一个简单的例子来逐步讲解字节码。
 
-```
+```java
 //Main.java
 public class Main {
 
@@ -73,7 +73,7 @@ public class Main {
 
 > 以文本的形式打开生成的class文件，内容如下:
 
-```
+```java
 cafe babe 0000 0034 0013 0a00 0400 0f09
 0003 0010 0700 1107 0012 0100 016d 0100
 0149 0100 063c 696e 6974 3e01 0003 2829
@@ -99,7 +99,7 @@ cafe babe 0000 0034 0013 0a00 0400 0f09
 
 > 通过java -version命令稍加验证, 可得结果。
 
-```
+```java
 Java(TM) SE Runtime Environment (build 0_131-b11)
 Java HotSpot(TM) 64-Bit Server VM (build 131-b11, mixed mode)
 ```
@@ -110,13 +110,13 @@ Java HotSpot(TM) 64-Bit Server VM (build 131-b11, mixed mode)
 
 > > 使用到java内置的一个反编译工具javap可以反编译字节码文件, 用法:
 >
-> ```
+> ```java
 > javap <options> <classes>
 > ```
 
 > 其中`<options>`选项包括:
 
-```
+```java
 -help  --help  -?        输出此用法消息
   -version                 版本信息
   -v  -verbose             输出附加信息
@@ -138,13 +138,13 @@ Java HotSpot(TM) 64-Bit Server VM (build 131-b11, mixed mode)
 
 > 输入命令
 
-```
+```java
 javap -verbose -p Main.class
 ```
 
 查看输出内容:
 
-```
+```java
 Classfile /E:/JavaCode/TestProj/out/production/TestProj/com/rhythm7/Main.class
   Last modified 2018-4-7; size 362 bytes
   MD5 checksum 4aed8540b098992663b7ba08c65312de
@@ -242,7 +242,7 @@ SourceFile: "Main.java"
 
 > 不同于C/C++, JVM是在加载Class文件的时候才进行的动态链接，也就是说这些字段和方法符号引用只有在运行期转换后才能获得真正的内存入口地址。当虚拟机运行时，需要从常量池获得对应的符号引用，再在类创建或运行时解析并翻译到具体的内存地址中。 直接通过反编译文件来查看字节码内容：
 
-```
+```java
 #1 = Methodref          ##18         // java/lang/Object."<init>":()V
 #4 = Class              #21            // java/lang/Object
 #7 = Utf8               <init>
@@ -253,7 +253,7 @@ SourceFile: "Main.java"
 
 > `第一个常量`是一个方法定义，指向了第4和第18个常量。以此类推查看第4和第18个常量。最后可以拼接成第一个常量右侧的注释内容:
 
-```
+```java
 java/lang/Object."<init>":()V
 ```
 
@@ -261,7 +261,7 @@ java/lang/Object."<init>":()V
 
 > `第二个常量`同理可得:
 
-```
+```java
 #2 = Fieldref           ##19         // com/rhythm7/Main.m:I
 #3 = Class              #20            // com/rhythm7/Main
 #5 = Utf8               m
@@ -291,7 +291,7 @@ java/lang/Object."<init>":()V
 
 > 在常量池之后的是对类内部的方法描述，在字节码中以表的集合形式表现，暂且不管字节码文件的16进制文件内容如何，我们直接看反编译后的内容。
 
-```
+```java
 private int m;
   descriptor: I
   flags: ACC_PRIVATE
@@ -299,7 +299,7 @@ private int m;
 
 > 此处声明了一个私有变量m，类型为int，返回值为int
 
-```
+```java
 public com.rhythmMain();
    descriptor: ()V
    flags: ACC_PUBLIC

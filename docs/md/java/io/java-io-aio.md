@@ -44,7 +44,7 @@ title: Java AIO - 异步IO详解
 
 > 在文中我们一再说明JAVA AIO框架在windows下使用windows IOCP技术，在Linux下使用epoll多路复用IO技术模拟异步IO，这个从JAVA AIO框架的部分类设计上就可以看出来。例如框架中，在Windows下负责实现套接字通道的具体类是sun.nio.ch.WindowsAsynchronousSocketChannelImpl，其引用的IOCP类型文档注释如是:
 
-```
+```java
 /** 
 * Windows implementation of AsynchronousChannelGroup encapsulating an I/O 
 * completion port. 
@@ -61,7 +61,7 @@ title: Java AIO - 异步IO详解
 
 > 下面，我们通过一个代码示例，来讲解JAVA AIO框架的具体使用，先上代码，在针对代码编写和运行中的要点进行讲解:
 
-```
+```java
 package testASocket;
 
 import java.io.IOException;

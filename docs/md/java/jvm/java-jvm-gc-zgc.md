@@ -136,7 +136,7 @@ ZGC（The Z Garbage Collector）是JDK 11中推出的一款低延迟垃圾回收
 
 > 读屏障示例：
 
-```
+```java
 Object o = obj.FieldA   // 从堆中读取引用，需要加入屏障
 <Load barrier>
 Object p = o  // 无需加入屏障，因为不是从堆中读取引用
@@ -172,7 +172,7 @@ int i =  obj.FieldB  //无需加入屏障，因为不是对象引用
 
 > 重要参数配置样例：
 
-```
+```java
 -Xms10G -Xmx10G 
 -XX:ReservedCodeCacheSize=256m -XX:InitialCodeCacheSize=256m 
 -XX:+UnlockExperimentalVMOptions -XX:+UseZGC 
@@ -183,23 +183,23 @@ int i =  obj.FieldB  //无需加入屏障，因为不是对象引用
 ```
 
 *   `-Xms -Xmx`：堆的最大内存和最小内存，这里都设置为10G，程序的堆内存将保持10G不变。
-*   ```
+*   ```java
     -XX:ReservedCodeCacheSize -XX:InitialCodeCacheSize
     ```
 
     ：设置CodeCache的大小， JIT编译的代码都放在CodeCache中，一般服务64m或128m就已经足够。我们的服务因为有一定特殊性，所以设置的较大，后面会详细介绍。
-*   ```
+*   ```java
     -XX:+UnlockExperimentalVMOptions -XX:+UseZGC
     ```
 
     ：启用ZGC的配置。
 *   `-XX:ConcGCThreads`：并发回收垃圾的线程。默认是总核数的12.5%，8核CPU默认是1。调大后GC变快，但会占用程序运行时的CPU资源，吞吐会受到影响。
-*   ```
+*   ```java
     -XX:ParallelGCThreads
     ```
 
     ：STW阶段使用线程数，默认是总核数的60%。
-*   ```
+*   ```java
     -XX:ZCollectionInterval
     ```
 

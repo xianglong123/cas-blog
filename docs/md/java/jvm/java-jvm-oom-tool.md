@@ -26,7 +26,7 @@ title: 调试排错 - Java 问题排查之JVM可视化工具
 
 *   `找到jconsole工具`
 
-```
+```java
 pdai@MacBook-Pro bin % ls
 jaotc		jcmd		jinfo		jshell		rmid
 jar		jconsole(这里)	jjs		jstack		rmiregistry
@@ -115,7 +115,7 @@ javap		jimage		jrunscript	rmic
 
 > JProfiler agent 是一个本地库，它可以在 JVM 启动时通过参数
 
-```
+```java
 -agentpath:<path to native library>
 ```
 

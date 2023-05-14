@@ -52,14 +52,14 @@ title: 调试排错 - Java 问题排查之使用IDEA本地调试和远程调试
 
 > Java Agent支持目标JVM启动时加载，也支持在目标JVM运行时加载，这两种不同的加载模式会使用不同的入口函数，如果需要在目标JVM启动的同时加载Agent，那么可以选择实现下面的方法：
 
-```
+```java
 [1] public static void premain(String agentArgs, Instrumentation inst);
 [2] public static void premain(String agentArgs);
 ```
 
 > JVM将首先寻找[1]，如果没有发现[1]，再寻找[2]。如果希望在目标JVM运行时加载Agent，则需要实现下面的方法：
 
-```
+```java
 [1] public static void agentmain(String agentArgs, Instrumentation inst);
 [2] public static void agentmain(String agentArgs);
 ```
@@ -70,7 +70,7 @@ title: 调试排错 - Java 问题排查之使用IDEA本地调试和远程调试
 
 > Agent需要打包成一个jar包，在ManiFest属性中指定Premain-Class或者Agent-Class：
 
-```
+```java
 Premain-Class: class
 Agent-Class: class
 ```
@@ -81,7 +81,7 @@ Agent-Class: class
 
 > com.sun.tools.attach.VirtualMachine 这个类代表一个JVM抽象，可以通过这个类找到目标JVM，并且将Agent挂载到目标JVM上。下面是使用com.sun.tools.attach.VirtualMachine进行动态挂载Agent的一般实现：
 
-```
+```java
 private void attachAgentToTargetJVM() throws Exception {
         List<VirtualMachineDescriptor> virtualMachineDescriptors = VirtualMachine.list();
         VirtualMachineDescriptor targetVM = null;
@@ -114,7 +114,7 @@ private void attachAgentToTargetJVM() throws Exception {
 
 > 创建JVM时，JVM会进行参数解析，即解析那些用来配置JVM启动的参数，比如堆大小、GC等；本文主要关注解析的参数为-agentlib、 -agentpath、 -javaagent，这几个参数用来指定Agent，JVM会根据这几个参数加载Agent。下面来分析一下JVM是如何解析这几个参数的。
 
-```
+```java
 // -agentlib and -agentpath
   if (match_option(option, "-agentlib:", &tail) ||
           (is_absolute_path = match_option(option, "-agentpath:", &tail))) {
@@ -159,7 +159,7 @@ private void attachAgentToTargetJVM() throws Exception {
 
 > 上面的代码片段截取自hotspot/src/share/vm/runtime/arguments.cpp中的 Arguments::parse_each_vm_init_arg(const JavaVMInitArgs* args, bool* patch_mod_javabase, Flag::Flags origin) 函数，该函数用来解析一个具体的JVM参数。这段代码的主要功能是解析出需要加载的Agent路径，然后调用add_init_agent函数进行解析结果的存储。下面先看一下add_init_agent函数的具体实现：
 
-```
+```java
 // -agentlib and -agentpath arguments
   static AgentLibraryList _agentList;
   static void add_init_agent(const char* name, char* options, bool absolute_path)

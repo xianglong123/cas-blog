@@ -120,7 +120,7 @@ title: 调试排错 - Java 问题排查之应用在线调试Arthas
 
 > 下载`arthas-boot.jar`，然后用`java -jar`的方式启动：
 
-```
+```java
 curl -O https://alibaba.github.io/arthas/arthas-boot.jar
 java -jar arthas-boot.jar
 ```
@@ -137,7 +137,7 @@ java -jar arthas-boot.jar
 
 > 一目了然的了解系统的状态，哪些线程比较占cpu? 他们到底在做什么?
 
-```
+```java
 $ thread -n 3
 "as-command-execute-daemon" Id=29 cpuUsage=75% RUNNABLE
     at sun.management.ThreadImpl.dumpThreads0(Native Method)
@@ -168,7 +168,7 @@ $ thread -n 3
 
 > 对类进行反编译:
 
-```
+```java
 $ jad javax.servlet.Servlet
 
 ClassLoader:
@@ -213,7 +213,7 @@ public interface Servlet {
 
 > 加载外部的`.class`文件，redefine jvm已加载的类。
 
-```
+```java
 redefine /tmp/Test.class
 redefine -c 327a647b /tmp/Test.class /tmp/Test\\$Inner.class
 ```
@@ -222,7 +222,7 @@ redefine -c 327a647b /tmp/Test.class /tmp/Test\\$Inner.class
 
 > 查找JVM中已经加载的类
 
-```
+```java
 $ sc -d org.springframework.web.context.support.XmlWebApplicationContext
  class-info        org.springframework.web.context.support.XmlWebApplicationContext
  code-source       /Users/xxx/work/test/WEB-INF/lib/spring-web-RELEASE.jar
@@ -257,13 +257,13 @@ $ sc -d org.springframework.web.context.support.XmlWebApplicationContext
 
 > 查看方法
 
-```
+```java
 test.arthas.TestStack#doGet
 ```
 
 的调用堆栈：
 
-```
+```java
 $ stack test.arthas.TestStack doGet
 Press Ctrl+C to abort.
 Affect(class-cnt:1 , method-cnt:1) cost in 286 ms.
@@ -304,13 +304,13 @@ ts=2018-09-18 10:11:45;thread_name=http-bio-8080-exec-10;id=d9;is_daemon=true;pr
 
 > 观察方法
 
-```
+```java
 test.arthas.TestWatch#doGet
 ```
 
 执行的入参，仅当方法抛出异常时才输出。
 
-```
+```java
 $ watch test.arthas.TestWatch doGet {params[0], throwExp} -e
 Press Ctrl+C to abort.
 Affect(class-cnt:1 , method-cnt:1) cost in 65 ms.
@@ -324,7 +324,7 @@ ts=2018-09-18 10:26:28;result=@ArrayList[
 
 > 监控某个特殊方法的调用统计数据，包括总调用次数，平均rt，成功率等信息，每隔5秒输出一次。
 
-```
+```java
 $ monitor -c 5 org.apache.dubbo.demo.provider.DemoServiceImpl sayHello
 Press Ctrl+C to abort.
 Affect(class-cnt:1 , method-cnt:1) cost in 109 ms.
@@ -345,7 +345,7 @@ Affect(class-cnt:1 , method-cnt:1) cost in 109 ms.
 
 > 记录方法调用信息，支持事后查看方法调用的参数，返回值，抛出的异常等信息，仿佛穿越时空隧道回到调用现场一般。
 
-```
+```java
 $ tt -t org.apache.dubbo.demo.provider.DemoServiceImpl sayHello
 Press Ctrl+C to abort.
 Affect(class-cnt:1 , method-cnt:1) cost in 75 ms.
@@ -366,7 +366,7 @@ Affect(class-cnt:1 , method-cnt:1) cost in 75 ms.
 
 > 了解当前系统中有多少类加载器，以及每个加载器加载的类数量，帮助您判断是否有类加载器泄露。
 
-```
+```java
 $ classloader
  name                                                  numberOfInstances  loadedCountTotal
  BootstrapClassLoader                                  1                  3346
@@ -446,7 +446,7 @@ $ classloader
 
 > Arthas支持使用管道对上述命令的结果进行进一步的处理，如
 
-```
+```java
 sm java.lang.String * | grep index
 ```
 
@@ -476,7 +476,7 @@ sm java.lang.String * | grep index
 
 > 在启动时，指定`stat-url`，就会回报执行的每一行命令，比如：
 
-```
+```java
 ./as.sh --stat-url http://1111:8080/api/stat
 ```
 
@@ -497,7 +497,7 @@ sm java.lang.String * | grep index
 
 > > 场景：我想看下查看最繁忙的线程，以及是否有阻塞情况发生? 常规查看线程，一般我们可以通过 top 等系统命令进行查看，但是那毕竟要很多个步骤，很麻烦。
 
-```
+```java
 thread -n 3 # 查看最繁忙的三个线程栈信息
 thread  # 以直观的方式展现所有的线程情况
 thread -b #找出当前阻塞其他线程的线程
@@ -507,7 +507,7 @@ thread -b #找出当前阻塞其他线程的线程
 
 > > 场景：我新写了一个类或者一个方法，我想知道新写的代码是否被部署了?
 
-```
+```java
 # 即可以找到需要的类全路径，如果存在的话
 sc *MyServlet
 
@@ -522,7 +522,7 @@ sm pdai.tech.servlet.TestMyServlet testMethod
 
 > > 场景：我新修改的内容在方法内部，而上一个步骤只能看到方法，这时候可以反编译看下源码
 
-```
+```java
 # 直接反编译出java 源代码，包含一此额外信息的
 jad pdai.tech.servlet.TestMyServlet
 ```
@@ -531,7 +531,7 @@ jad pdai.tech.servlet.TestMyServlet
 
 > > 场景：我想看下我新加的方法在线运行的参数和返回值?
 
-```
+```java
 # 同时监控入参，返回值，及异常
 watch pdai.tech.servlet.TestMyServlet testMethod "{params, returnObj, throwExp}" -e -x 2
 ```
@@ -542,7 +542,7 @@ watch pdai.tech.servlet.TestMyServlet testMethod "{params, returnObj, throwExp}"
 
 > > 场景：我想看下某个方法的调用栈的信息?
 
-```
+```java
 stack pdai.tech.servlet.TestMyServlet testMethod
 ```
 
@@ -552,7 +552,7 @@ stack pdai.tech.servlet.TestMyServlet testMethod
 
 > > 场景：testMethod这个方法入口响应很慢，如何找到最耗时的子调用?
 
-```
+```java
 # 执行的时候每个子调用的运行时长，可以找到最耗时的子调用。
 trace pdai.tech.servlet.TestMyServlet testMethod
 ```
@@ -563,7 +563,7 @@ trace pdai.tech.servlet.TestMyServlet testMethod
 
 > > 场景：我找到了问题所在，能否线上直接修改测试，而不需要在本地改了代码后，重新打包部署，然后重启观察效果?
 
-```
+```java
 # 先反编译出class源码
 jad --source-only com.example.demo.arthas.user.UserController > /tmp/UserController.java  
 
@@ -582,7 +582,7 @@ redefine /tmp/com/example/demo/arthas/user/UserController.class
 
 > > 场景：我想看下某个方法的性能
 
-```
+```java
 monitor -c 5 demo.MathGame primeFactors
 ```
 

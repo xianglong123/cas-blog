@@ -55,7 +55,7 @@ Java 在线问题排查主要分两篇：本文是第一篇，通过linux常用�
 
 > grep常用命令：
 
-```
+```bash
 # 基本使用
 grep yoursearchkeyword f.txt     #文件查找
 grep 'KeyWord otherKeyWord' f.txt cpf.txt #多文件查找, 含空格加引号
@@ -76,7 +76,7 @@ seq 10 | grep 5 -C 3    #上下匹配，平时用这个就妥了
 
 > Grep的参数：
 
-```
+```bash
 --color=auto：显示颜色;
 -i, --ignore-case：忽略字符大小写;
 -o, --only-matching：只显示匹配到的部分;
@@ -96,7 +96,7 @@ seq 10 | grep 5 -C 3    #上下匹配，平时用这个就妥了
 
 > awk基本命令：
 
-```
+```bash
 # 基本使用
 awk '{print $4,$6}' f.txt
 awk '{print NR,$0}' f.txt cpf.txt    
@@ -114,7 +114,7 @@ awk '$5 ~ /ldb/ {print}' f.txt #第五列匹配ldb
 
 > 内建变量
 
-```
+```bash
 `NR`: NR表示从awk开始执行后，按照记录分隔符读取的数据次数，默认的记录分隔符为换行符，因此默认的就是读取的数据行数，NR可以理解为Number of Record的缩写。
 
 `FNR`: 在awk处理多个输入文件的时候，在处理完第一个文件后，NR并不会从1开始，而是继续累加，因此就出现了FNR，每当处理一个新文件的时候，FNR就从1开始计数，FNR可以理解为File Number of Record。
@@ -128,7 +128,7 @@ awk '$5 ~ /ldb/ {print}' f.txt #第五列匹配ldb
 
 > sed常用：
 
-```
+```bash
 # 文本打印
 sed -n '3p' xxx.log #只打印第三行
 sed -n '$p' xxx.log #只打印最后一行
@@ -165,7 +165,7 @@ find . -name  "*.txt" |xargs cat
 
 > 最常用的`tail -f filename`
 
-```
+```bash
 # 基本使用
 tail -f xxx.log # 循环监听文件
 tail -300f xxx.log #倒数300行并追踪文件
@@ -177,7 +177,7 @@ tailf xxx.log #等同于tail -f -n 10 打印最后10行，然后追踪文件
 
 > tail -f 与tail F 与tailf三者区别
 
-```
+```bash
 `tail  -f `  等于--follow=descriptor，根据文件描述进行追踪，当文件改名或删除后，停止追踪。
 
 `tail -F` 等于 --follow=name ==retry，根据文件名字进行追踪，当文件改名或删除后，保持重试，当有新的文件和他同名时，继续追踪
@@ -187,7 +187,7 @@ tailf xxx.log #等同于tail -f -n 10 打印最后10行，然后追踪文件
 
 > tail的参数
 
-```
+```bash
 -f 循环读取
 -q 不显示处理信息
 -v 显示详细的处理信息
@@ -200,7 +200,7 @@ tailf xxx.log #等同于tail -f -n 10 打印最后10行，然后追踪文件
 
 ### # 文件查找 - find
 
-```
+```bash
 sudo -u admin find /home/admin /tmp /usr -name \\*.log(多个目录去找)
 find . -iname \\*.txt(大小写都匹配)
 find . -type d(当前目录下的所有子目录)
@@ -220,7 +220,7 @@ find /home/admin -mmin -1  1分钟内修改过的文件
 
 > 批量查询vm-shopbase满足条件的日志
 
-```
+```bash
 pgm -A -f vm-shopbase 'cat /home/admin/shopbase/logs/shopbase.log.2017-01-17|grep 2069861630'
 ```
 
@@ -228,7 +228,7 @@ pgm -A -f vm-shopbase 'cat /home/admin/shopbase/logs/shopbase.log.2017-01-17|gre
 
 ### # 查看所有网络接口的属性
 
-```
+```bash
 [root@pdai.tech ~]# ifconfig
 eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
         inet 11194  netmask 2220  broadcast 11255
@@ -249,7 +249,7 @@ lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
 
 ### # 查看防火墙设置
 
-```
+```bash
 [root@pdai.tech ~]# iptables -L
 Chain INPUT (policy ACCEPT)
 target     prot opt source               destination
@@ -263,7 +263,7 @@ target     prot opt source               destination
 
 ### # 查看路由表
 
-```
+```bash
 [root@pdai.tech ~]# route -n
 Kernel IP routing table
 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
@@ -276,7 +276,7 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 
 > 查看所有监听端口
 
-```
+```bash
 [root@pdai.tech ~]# netstat -lntp
 Active Internet connections (only servers)
 Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name  
@@ -289,7 +289,7 @@ tcp6       0      0 :::3306                 :::*                    LISTEN      
 
 > 查看所有已经建立的连接
 
-```
+```bash
 [root@pdai.tech ~]# netstat -antp
 Active Internet connections (servers and established)
 Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
@@ -304,7 +304,7 @@ tcp6       0      0 :::3306                 :::*                    LISTEN      
 
 > 查看当前连接
 
-```
+```bash
 [root@pdai.tech ~]# netstat -nat|awk  '{print $6}'|sort|uniq -c|sort -rn
       5 LISTEN
       2 ESTABLISHED
@@ -314,7 +314,7 @@ tcp6       0      0 :::3306                 :::*                    LISTEN      
 
 > 查看网络统计信息进程
 
-```
+```bash
 [root@pdai.tech ~]# netstat -s
 Ip:
     21017132 total packets received
@@ -359,7 +359,7 @@ Tcp:
 
 ### # 查看所有进程
 
-```
+```bash
 [root@pdai.tech ~]# ps -ef | grep java
 root      1249     1  0 Nov04 ?        00:58:05 java -jar /opt/tech_doc/bin/tech_arch-1-RELEASE.jar --server.port=9999
 root     32718 32518  0 08:36 pts/0    00:00:00 grep --color=auto java
@@ -369,7 +369,7 @@ root     32718 32518  0 08:36 pts/0    00:00:00 grep --color=auto java
 
 > top除了看一些基本信息之外，剩下的就是配合来查询vm的各种问题了
 
-```
+```bash
 # top -H -p pid
 top - 08:37:51 up 45 days, 18:45,  1 user,  load average: 01, 03, 05
 Threads:  28 total,   0 running,  28 sleeping,   0 stopped,   0 zombie
@@ -388,7 +388,7 @@ KiB Swap:  2097148 total,  1835392 free,   261756 used.  1502036 avail Mem
 
 ### # 查看内存使用 - free -m
 
-```
+```bash
 [root@pdai.tech ~]# free -m
               total        used        free      shared  buff/cache   available
 Mem:           1837         196         824           0         816        1469
@@ -397,7 +397,7 @@ Swap:          2047         255        1792
 
 ### # 查看各分区使用情况
 
-```
+```bash
 [root@pdai.tech ~]# df -h
 Filesystem      Size  Used Avail Use% Mounted on
 devtmpfs        909M     0  909M   0% /dev
@@ -410,42 +410,42 @@ tmpfs           184M     0  184M   0% /run/user/0
 
 ### # 查看指定目录的大小
 
-```
+```bash
 [root@pdai.tech ~]# du -sh
 803M
 ```
 
 ### # 查看内存总量
 
-```
+```bash
 [root@pdai.tech ~]# grep MemTotal /proc/meminfo
 MemTotal:        1882088 kB
 ```
 
 ### # 查看空闲内存量
 
-```
+```bash
 [root@pdai.tech ~]# grep MemFree /proc/meminfo
 MemFree:           74120 kB
 ```
 
 ### # 查看系统负载磁盘和分区
 
-```
+```bash
 [root@pdai.tech ~]# grep MemFree /proc/meminfo
 MemFree:           74120 kB
 ```
 
 ### # 查看系统负载磁盘和分区
 
-```
+```bash
 [root@pdai.tech ~]# cat /proc/loadavg
 01 04 05 2/174 32751
 ```
 
 ### # 查看挂接的分区状态
 
-```
+```bash
 [root@pdai.tech ~]# mount | column -t
 sysfs       on  /sys                             type  sysfs       (rw,nosuid,nodev,noexec,relatime)
 proc        on  /proc                            type  proc        (rw,nosuid,nodev,noexec,relatime)
@@ -456,7 +456,7 @@ securityfs  on  /sys/kernel/security             type  securityfs  (rw,nosuid,no
 
 ### # 查看所有分区
 
-```
+```bash
 [root@pdai.tech ~]# fdisk -l
 
 Disk /dev/vda: 9 GB, 42949672960 bytes, 83886080 sectors
@@ -472,7 +472,7 @@ Disk identifier: 0x0008d73a
 
 ### # 查看所有交换分区
 
-```
+```bash
 [root@pdai.tech ~]# swapon -s
 Filename                                Type            Size    Used    Priority
 /etc/swap                               file    2097148 261756  -2
@@ -480,7 +480,7 @@ Filename                                Type            Size    Used    Priority
 
 ### # 查看硬盘大小
 
-```
+```bash
 [root@pdai.tech ~]# fdisk -l |grep Disk
 Disk /dev/vda: 9 GB, 42949672960 bytes, 83886080 sectors
 Disk label type: dos
@@ -491,7 +491,7 @@ Disk identifier: 0x0008d73a
 
 ### # 查看活动用户
 
-```
+```bash
 [root@pdai.tech ~]# w
  08:47:20 up 45 days, 18:54,  1 user,  load average: 01, 03, 05
 USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
@@ -500,14 +500,14 @@ root     pts/0    xxx.1200    08:32    00s  32s  32s -bash
 
 ### # 查看指定用户信息
 
-```
+```bash
 [root@pdai.tech ~]# id
 uid=0(root) gid=0(root) groups=0(root)
 ```
 
 ### # 查看用户登录日志
 
-```
+```bash
 [root@pdai.tech ~]# last
 root     pts/0        xxx.1200    Fri Dec 20 08:32   still logged in
 root     pts/0        xxx.160     Thu Dec 19 21:47 - 00:28  (02:41)
@@ -519,7 +519,7 @@ root     pts/0        xxx.1173    Tue Dec 17 13:35 - 17:37  (04:02)
 
 ### # 查看系统所有用户
 
-```
+```bash
 [root@pdai.tech ~]# cut -d: -f1 /etc/passwd
 root
 bin
@@ -530,13 +530,13 @@ adm
 
 ### # 查看系统所有组
 
-```
+```bash
 cut -d: -f1 /etc/group
 ```
 
 ### # 查看服务，模块和包相关
 
-```
+```bash
 # 查看当前用户的计划任务服务
 crontab -l 
 
@@ -555,7 +555,7 @@ lsmod
 
 ### # 查看系统，设备，环境信息
 
-```
+```bash
 # 常用
 env # 查看环境变量资源
 uptime # 查看系统运行时间、用户数、负载
@@ -580,7 +580,7 @@ cat /proc/cpuinfo |grep "model name" && cat /proc/cpuinfo |grep "physical id"
 
 > tsar是淘宝开源的的采集工具。很好用, 将历史收集到的数据持久化在磁盘上，所以我们快速来查询历史的系统数据。当然实时的应用情况也是可以查询的啦。大部分机器上都有安装。
 
-```
+```bash
 tsar  ##可以查看最近一天的各项指标
 tsar --live ##可以查看实时指标，默认五秒一刷
 tsar -d 20161218 ##指定查看某天的数据，貌似最多只能看四个月的数据

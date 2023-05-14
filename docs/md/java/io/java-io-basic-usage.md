@@ -42,7 +42,7 @@ title: Java IO - 常见类使用
 
 > 递归地列出一个目录下所有文件:
 
-```
+```java
 public static void listAllFiles(File dir) {
     if (dir == null || !dir.exists()) {
         return;
@@ -59,7 +59,7 @@ public static void listAllFiles(File dir) {
 
 ### # 字节流相关
 
-```
+```java
 public static void copyFile(String src, String dist) throws IOException {
 
     FileInputStream in = new FileInputStream(src);
@@ -80,7 +80,7 @@ public static void copyFile(String src, String dist) throws IOException {
 
 ### # 实现逐行输出文本文件的内容
 
-```
+```java
 public static void readFileContent(String filePath) throws IOException {
 
     FileReader fileReader = new FileReader(filePath);
@@ -111,7 +111,7 @@ public static void readFileContent(String filePath) throws IOException {
 
 > 序列化的类需要实现 Serializable 接口，它只是一个标准，没有任何方法需要实现，但是如果不去实现它的话而进行序列化，会抛出异常。
 
-```
+```java
 public static void main(String[] args) throws IOException, ClassNotFoundException {
     A a1 = new A(123, "abc");
     String objectFile = "file/a1";
@@ -147,7 +147,7 @@ private static class A implements Serializable {
 
 > ArrayList 中存储数据的数组 elementData 是用 transient 修饰的，因为这个数组是动态扩展的，并不是所有的空间都被使用，因此就不需要所有的内容都被序列化。通过重写序列化和反序列化方法，使得可以只序列化数组中有内容的那部分数据。
 
-```
+```java
 private transient Object[] elementData;
 ```
 
@@ -162,7 +162,7 @@ private transient Object[] elementData;
 
 > 没有公有的构造函数，只能通过静态方法来创建实例。
 
-```
+```java
 InetAddress.getByName(String host);
 InetAddress.getByAddress(byte[] address);
 ```
@@ -171,7 +171,7 @@ InetAddress.getByAddress(byte[] address);
 
 > 可以直接从 URL 中读取字节流数据。
 
-```
+```java
 public static void main(String[] args) throws IOException {
 
     URL url = new URL("http://www.baidu.com");

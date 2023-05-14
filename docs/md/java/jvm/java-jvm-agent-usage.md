@@ -52,14 +52,14 @@ title: 调试排错 - Java动态调试技术原理
 
 > Java Agent支持目标JVM启动时加载，也支持在目标JVM运行时加载，这两种不同的加载模式会使用不同的入口函数，如果需要在目标JVM启动的同时加载Agent，那么可以选择实现下面的方法：
 
-```
+```java
 [1] public static void premain(String agentArgs, Instrumentation inst);
 [2] public static void premain(String agentArgs);
 ```
 
 > JVM将首先寻找[1]，如果没有发现[1]，再寻找[2]。如果希望在目标JVM运行时加载Agent，则需要实现下面的方法：
 
-```
+```java
 [1] public static void agentmain(String agentArgs, Instrumentation inst);
 [2] public static void agentmain(String agentArgs);
 ```

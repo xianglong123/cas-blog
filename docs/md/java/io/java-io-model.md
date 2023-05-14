@@ -80,7 +80,7 @@ BIO就是: blocking IO。最容易理解、最容易实现的IO工作方式，�
 
 > 客户端代码(SocketClientDaemon)
 
-```
+```java
 package testBSocket;
 
 import java.util.concurrent.CountDownLatch;
@@ -106,7 +106,7 @@ public class SocketClientDaemon {
 
 > 客户端代码(SocketClientRequestThread模拟请求)
 
-```
+```java
 package testBSocket;
 
 import java.io.IOException;
@@ -201,7 +201,7 @@ public class SocketClientRequestThread implements Runnable {
 
 > 服务器端(SocketServer1)单个线程
 
-```
+```java
 package testBSocket;
 
 import java.io.InputStream;
@@ -268,7 +268,7 @@ public class SocketServer1 {
 
 > 客户端代码和上文一样，最主要是更改服务器端的代码:
 
-```
+```java
 package testBSocket;
 
 import java.io.IOException;

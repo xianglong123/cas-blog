@@ -51,7 +51,7 @@ Netty是一个高性能、异步事件驱动的NIO框架，提供了对TCP、UDP
 
 ### # 例子
 
-```
+```java
 <dependency>
      <groupId>org.jboss.netty</groupId>
      <artifactId>netty</artifactId>
@@ -61,7 +61,7 @@ Netty是一个高性能、异步事件驱动的NIO框架，提供了对TCP、UDP
 
 *   服务端。接收客户端请求并将内容打印出来，同时发送一个消息收到回执。
 
-```
+```java
 public class NettyServer {
 
     private static int HEADER_LENGTH = 4;
@@ -115,7 +115,7 @@ public class NettyServer {
 
 *   客户端。向服务端发送一个请求，然后打印服务端响应的内容。
 
-```
+```java
 public class NettyClient {
 
     private final ByteBuffer readHeader  = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN);

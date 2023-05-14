@@ -31,7 +31,7 @@ title: Java IO - 源码:OutputStream
 
 > OutputStream 类重要方法设计如下：
 
-```
+```java
 // 写入一个字节，可以看到这里的参数是一个 int 类型，对应上面的读方法，int 类型的 32 位，只有低 8 位才写入，高 24 位将舍弃。
 public abstract void write(int b)
 
@@ -56,7 +56,7 @@ public void close()
 
 > OutputStream抽象类源码如下：
 
-```
+```java
 public abstract class OutputStream implements Closeable, Flushable {
 
     // JDK11中增加了一个nullOutputStream，即空模式实现，以便可以直接调用而不用判空（可以看如下的补充说明）
@@ -123,7 +123,7 @@ public abstract class OutputStream implements Closeable, Flushable {
 
 > 举个例子：
 
-```
+```java
 public class MyParser implements Parser {
   private static Action NO_ACTION = new Action() {
     public void doSomething() { /* do nothing */ }
@@ -140,7 +140,7 @@ public class MyParser implements Parser {
 
 > 然后便`可以始终可以这么调用，而不用再判断空了`
 
-```
+```java
 ParserFactory.getParser().findAction(someInput).doSomething();
 ```
 
@@ -148,7 +148,7 @@ ParserFactory.getParser().findAction(someInput).doSomething();
 
 > FilterOutputStream 源码如下
 
-```
+```java
 public class FilterOutputStream extends OutputStream {
 
     // 被装饰的实际outputStream
@@ -244,7 +244,7 @@ public class FilterOutputStream extends OutputStream {
 
 > @pdai: 对比下JDK8中，close方法是没有加锁处理的。这种情况下你可以看JDK8源码中，直接利用java7的try with resources方式，优雅的调用flush方法后对out进行关闭。
 
-```
+```java
 public void close() throws IOException {
     try (OutputStream ostream = out) {
         flush();
@@ -256,7 +256,7 @@ public void close() throws IOException {
 
 > ByteArrayOutputStream 源码如下
 
-```
+```java
 public class ByteArrayOutputStream extends OutputStream {
 
     // 实际的byte数组
@@ -379,7 +379,7 @@ public class ByteArrayOutputStream extends OutputStream {
 
 > BufferedOutputStream 源码如下
 
-```
+```java
 public class BufferedOutputStream extends FilterOutputStream {
 
     // Buffered outputStream底层也是byte数组

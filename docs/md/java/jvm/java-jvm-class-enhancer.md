@@ -59,7 +59,7 @@ title: JVM 基础 - 字节码的增强技术
 
 > 利用ASM的CoreAPI来增强类。这里不纠结于AOP的专业名词如切片、通知，只实现在方法调用前、后增加逻辑，通俗易懂且方便理解。首先定义需要被增强的Base类：其中只包含一个process()方法，方法内输出一行process。增强后，我们期望的是，方法执行前输出start，之后输出end。
 
-```
+```java
 public class Base {
     public void process(){
         System.out.println("process");
@@ -69,7 +69,7 @@ public class Base {
 
 > 为了利用ASM实现AOP，需要定义两个类：一个是MyClassVisitor类，用于对字节码的visit以及修改；另一个是Generator类，在这个类中定义ClassReader和ClassWriter，其中的逻辑是，classReader读取字节码，然后交给MyClassVisitor类处理，处理完成后由ClassWriter写字节码并将旧的字节码替换掉。Generator类较简单，我们先看一下它的实现，如下所示，然后重点解释MyClassVisitor类。
 
-```
+```java
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
@@ -95,7 +95,7 @@ public class Generator {
 
 > MyClassVisitor继承自ClassVisitor，用于对字节码的观察。它还包含一个内部类MyMethodVisitor，继承自MethodVisitor用于对类内方法的观察，它的整体代码如下：
 
-```
+```java
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -174,7 +174,7 @@ public class MyClassVisitor extends ClassVisitor implements Opcodes {
 
 > 了解这四个类后，我们可以写一个小Demo来展示Javassist简单、快速的特点。我们依然是对Base中的process()方法做增强，在方法调用前后分别输出start和end，实现代码如下。我们需要做的就是从pool中获取到相应的CtClass对象和其中的方法，然后执行method.insertBefore和insertAfter方法，参数为要插入的Java代码，再以字符串的形式传入即可，实现起来也极为简单。
 
-```
+```java
 import com.meituan.mtrace.agent.javassist.*;
 
 public class JavassistTest {
@@ -206,7 +206,7 @@ public class JavassistTest {
 
 > 我们的目的就是，在JVM运行中的时候，将process()方法做替换，在其前后分别打印start和end。也就是在运行中时，每五秒打印的内容由process变为打印start process end。那如何解决JVM不允许运行时重加载类信息的问题呢？为了达到这个目的，我们接下来一一来介绍需要借助的Java类库。
 
-```
+```java
 import java.lang.management.ManagementFactory;
 
 public class Base {
@@ -237,7 +237,7 @@ public class Base {
 
 > 我们定义一个实现了ClassFileTransformer接口的类TestTransformer，依然在其中利用Javassist对Base类中的process()方法进行增强，在前后分别打印start和end，代码如下：
 
-```
+```java
 import java.lang.instrument.ClassFileTransformer;
 
 public class TestTransformer implements ClassFileTransformer {
@@ -261,7 +261,7 @@ public class TestTransformer implements ClassFileTransformer {
 
 > 现在有了Transformer，那么它要如何注入到正在运行的JVM呢？还需要定义一个Agent，借助Agent的能力将Instrument注入到JVM中。我们将在下一小节介绍Agent，现在要介绍的是Agent中用到的另一个类Instrumentation。在JDK 1.6之后，Instrumentation可以做启动后的Instrument、本地代码（Native Code）的Instrument，以及动态改变Classpath等等。我们可以向Instrumentation中添加上文中定义的Transformer，并指定要被重加载的类，代码如下所示。这样，当Agent被Attach到一个JVM中时，就会执行类字节码替换并重载入JVM的操作。
 
-```
+```java
 import java.lang.instrument.Instrumentation;
 
 public class TestAgent {
@@ -300,7 +300,7 @@ public class TestAgent {
 
 *   最后利用Attach API，将我们打包好的jar包Attach到指定的JVM pid上，代码如下：
 
-```
+```java
 import com.sun.tools.attach.VirtualMachine;
 
 public class Attacher {

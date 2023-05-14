@@ -38,7 +38,7 @@ Java 在线问题排查主要分两篇：本文是第二篇，通过java调试/�
 
 > jps常用命令
 
-```
+```bash
 jps # 显示进程的ID 和 类的名称
 jps –l # 输出输出完全的包名，应用主类名，jar的完全路径名 
 jps –v # 输出jvm参数
@@ -49,7 +49,7 @@ jps -l xxx.xxx.xx.xx # 远程查看
 
 > jps参数
 
-```
+```bash
 -q：仅输出VM标识符，不包括classname,jar name,arguments in main method 
 -m：输出main method的参数 
 -l：输出完全的包名，应用主类名，jar的完全路径名 
@@ -70,7 +70,7 @@ jps -l xxx.xxx.xx.xx # 远程查看
 
 > jstack常用命令:
 
-```
+```bash
 # 基本
 jstack 2815
 
@@ -83,7 +83,7 @@ jstack -l 2815
 
 > jstack参数：
 
-```
+```bash
 -l 长列表. 打印关于锁的附加信息,例如属于java.util.concurrent 的 ownable synchronizers列表.
 
 -F 当’jstack [-l] pid’没有相应的时候强制打印栈信息
@@ -101,7 +101,7 @@ jstack -l 2815
 
 > jinfo常用命令:
 
-```
+```bash
 # 输出当前 jvm 进程的全部参数和系统属性
 jinfo 2815
 
@@ -123,7 +123,7 @@ jinfo -sysprops 2815
 
 > jinfo参数：
 
-```
+```bash
 no option 输出全部的参数和系统属性
 -flag name 输出对应名称的参数
 -flag [+|-]name 开启或者关闭对应名称的参数
@@ -140,7 +140,7 @@ no option 输出全部的参数和系统属性
 
 > 两个用途
 
-```
+```bash
 # 查看堆的情况
 jmap -heap 2815
 
@@ -154,7 +154,7 @@ jmap -histo 2815 | head -10
 
 > jmap参数
 
-```
+```bash
 no option： 查看进程的内存映像信息,类似 Solaris pmap 命令。
 heap： 显示Java堆详细信息
 histo[:live]： 显示堆中对象的统计信息
@@ -172,7 +172,7 @@ J<flag>：指定传递给运行jmap的JVM的参数
 
 > jstat参数众多，但是使用一个就够了
 
-```
+```bash
 jstat -gcutil 2815 1000
 ```
 
@@ -190,7 +190,7 @@ jstat -gcutil 2815 1000
 
 > CHLSDB感觉很多情况下可以看到更好玩的东西，不详细叙述了。 查询资料听说jstack和jmap等工具就是基于它的。
 
-```
+```bash
 java -classpath /opt/taobao/java/lib/sa-jdi.jar sun.jvm.hotspot.CLHSDB
 ```
 
@@ -204,7 +204,7 @@ java -classpath /opt/taobao/java/lib/sa-jdi.jar sun.jvm.hotspot.CLHSDB
 
 *   查看当前谁调用了ArrayList的add方法，同时只打印当前ArrayList的size大于500的线程调用栈
 
-```
+```bash
 @OnMethod(clazz = "java.util.ArrayList", method="add", location = @Location(value = Kind.CALL, clazz = "/./", method = "/./"))
 public static void m(@ProbeClassName String probeClass, @ProbeMethodName String probeMethod, @TargetInstance Object instance, @TargetMethodOrField String method) {
 
@@ -220,7 +220,7 @@ public static void m(@ProbeClassName String probeClass, @ProbeMethodName String 
 
 *   监控当前服务方法被调用时返回的值以及请求的参数
 
-```
+```java
 @OnMethod(clazz = "com.taobao.sellerhome.transfer.biz.impl.C2CApplyerServiceImpl", method="nav", location = @Location(value = Kind.RETURN))
 public static void mt(long userId, int current, int relation, String check, String redirectUrl, @Return AnyType result) {
 
@@ -274,7 +274,7 @@ public static void mt(long userId, int current, int relation, String check, Stri
 
 > sudo dmesg|grep -i kill|less 去找关键字oom_killer。找到的结果类似如下:
 
-```
+```bash
 [67107021013] java invoked oom-killer: gfp_mask=0xd0, order=0, oom_adj=0, oom_scoe_adj=0
 [67107070639] [<ffffffff81118898>] ? oom_kill_process+0x68/0x140 
 [67107257588] Task in /LXC011175068174 killed as a result of limit of /LXC011175068174 
@@ -288,7 +288,7 @@ public static void mt(long userId, int current, int relation, String check, Stri
 
 > date -d "1970-01-01 UTC
 
-```
+```bash
 echo "$(date +%s)-$(cat /proc/uptime|cut -f 1 -d )+122888926194"|bc
 ```
 

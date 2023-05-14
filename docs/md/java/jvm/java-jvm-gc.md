@@ -61,7 +61,7 @@ title: GC - Java 垃圾回收基础知识
 
 > 正因为循环引用的存在，因此 Java 虚拟机不使用引用计数算法。
 
-```
+```java
 public class ReferenceCountingGC {
 
     public Object instance = null;
@@ -122,7 +122,7 @@ public class ReferenceCountingGC {
 
 > 使用 new 一个新对象的方式来创建强引用。
 
-```
+```java
 Object obj = new Object();
 ```
 
@@ -132,7 +132,7 @@ Object obj = new Object();
 
 > 使用 SoftReference 类来创建软引用。
 
-```
+```java
 Object obj = new Object();
 SoftReference<Object> sf = new SoftReference<Object>(obj);
 obj = null;  // 使对象只被软引用关联
@@ -144,7 +144,7 @@ obj = null;  // 使对象只被软引用关联
 
 > 使用 WeakReference 类来实现弱引用。
 
-```
+```java
 Object obj = new Object();
 WeakReference<Object> wf = new WeakReference<Object>(obj);
 obj = null;

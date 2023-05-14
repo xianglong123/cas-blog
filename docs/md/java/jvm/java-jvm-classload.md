@@ -85,9 +85,9 @@ title: JVM 基础 - Java 类加载机制
 
     > 假设一个类变量的定义为:
 
-    ```
+    ```java
     public static int value = 3
-    ```
+    ```java
 
     ；那么变量value在准备阶段过后的初始值为`0`，而不是`3`，因为这时候尚未开始执行任何Java方法，而把value赋值为3的`put static`指令是在程序编译后，存放于类构造器`<clinit>()`方法之中的，所以把value赋值为3的动作将在初始化阶段才会执行。
 
@@ -99,7 +99,7 @@ title: JVM 基础 - Java 类加载机制
 *   如果在数组初始化时没有对数组中的各元素赋值，那么其中的元素将根据对应的数据类型而被赋予默认的零值。
 *   如果类字段的字段属性表中存在ConstantValue属性，即同时被final和static修饰，那么在准备阶段变量value就会被初始化为ConstValue属性所指定的值。假设上面的类变量value被定义为:
 
-    ```
+    ```java
     public static final int value = 3；
     ```
 
@@ -156,7 +156,7 @@ title: JVM 基础 - Java 类加载机制
 
 > > 站在Java虚拟机的角度来讲，只存在两种不同的类加载器: 启动类加载器: 它使用C++实现(这里仅限于`Hotspot`，也就是JDK1.5之后默认的虚拟机，有很多其他的虚拟机是用Java语言实现的)，是虚拟机自身的一部分；所有其他的类加载器: 这些类加载器都由Java语言实现，独立于虚拟机之外，并且全部继承自抽象类
 >
-> ```
+> ```java
 > java.lang.ClassLoader
 > ```
 >
@@ -168,7 +168,7 @@ title: JVM 基础 - Java 类加载机制
 
 > `扩展类加载器`: Extension ClassLoader，该加载器由
 
-```
+```java
 sun.misc.Launcher$ExtClassLoader
 ```
 
@@ -176,7 +176,7 @@ sun.misc.Launcher$ExtClassLoader
 
 > `应用程序类加载器`: Application ClassLoader，该类加载器由
 
-```
+```java
 sun.misc.Launcher$AppClassLoader
 ```
 
@@ -192,7 +192,7 @@ sun.misc.Launcher$AppClassLoader
 
 > 寻找类加载器小例子如下:
 
-```
+```java
 package com.pdai.jvm.classloader;
 public class ClassLoaderTest {
      public static void main(String[] args) {
@@ -206,7 +206,7 @@ public class ClassLoaderTest {
 
 > 结果如下:
 
-```
+```java
 sun.misc.Launcher$AppClassLoader@64fef26a
 sun.misc.Launcher$ExtClassLoader@1ddd40f3
 null
@@ -224,7 +224,7 @@ null
 
 > 3、通过ClassLoader.loadClass()方法动态加载
 
-```
+```java
 package com.pdai.jvm.classloader;
 public class loaderTest { 
         public static void main(String[] args) throws ClassNotFoundException { 
@@ -273,7 +273,7 @@ public class Test2 {
 
 > `双亲委派代码实现`
 
-```
+```java
 public Class<?> loadClass(String name)throws ClassNotFoundException {
             return loadClass(name, false);
     }
@@ -311,7 +311,7 @@ public Class<?> loadClass(String name)throws ClassNotFoundException {
 
 > 通常情况下，我们都是直接使用系统类加载器。但是，有的时候，我们也需要自定义类加载器。比如应用是通过网络来传输 Java 类的字节码，为保证安全性，这些字节码经过了加密处理，这时系统类加载器就无法对其进行加载，这样则需要自定义类加载器来实现。自定义类加载器一般都是继承自 ClassLoader 类，从上面对 loadClass 方法来分析来看，我们只需要重写 findClass 方法即可。下面我们通过一个示例来演示自定义类加载器的流程:
 
-```
+```java
 package com.pdai.jvm.classloader;
 import java.io.*;
 
