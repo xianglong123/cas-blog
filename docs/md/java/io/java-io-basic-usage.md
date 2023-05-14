@@ -200,7 +200,7 @@ public static void main(String[] args) throws IOException {
 *   Socket: 客户端类
 *   服务器和客户端通过 InputStream 和 OutputStream 进行输入输出。
 
-> ![image](./Java IO - 常见类使用 _ Java 全栈知识体系_files/ClienteServidorSockets1521731145260.jpg)
+> ![image](images/ClienteServidorSockets1521731145260.jpg)
 
 #### # Datagram
 

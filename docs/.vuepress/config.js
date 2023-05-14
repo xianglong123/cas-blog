@@ -178,8 +178,6 @@ module.exports = {
                     collapsable: false,
                     children: [
                         '/md/java/java8up/java-8-up-overview',
-                        '/md/java/java8up/java9-11',
-                        '/md/java/java8up/java12-17',
                     ]
                 },
                 {

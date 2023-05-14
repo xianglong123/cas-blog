@@ -653,7 +653,7 @@ ssize_t sendfile64(int out_fd, int in_fd, off_t *offset, size_t count);
 
 > RocketMQ 选择了 mmap + write 这种零拷贝方式，适用于业务级消息这种小块文件的数据持久化和传输；而 Kafka 采用的是 sendfile 这种零拷贝方式，适用于系统日志消息这种高吞吐量的大块文件的数据持久化和传输。但是值得注意的一点是，Kafka 的索引文件使用的是 mmap + write 方式，数据文件使用的是 sendfile 方式。
 
-> ![](./Java NIO - 零拷贝实现 _ Java 全栈知识体系_files/java-io-copy-11.jpg)
+> ![](images/java-io-copy-11.jpg)
 
 ### # 参考文章
 
