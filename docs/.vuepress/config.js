@@ -79,9 +79,9 @@ module.exports = {
                     },
                     {
                         text: '框架介绍', items: [
-                            {text: 'mybatis', link: '/md/java/basic/java-basic-oop'},
-                            {text: 'mybatis-plus', link: '/md/db/mp/mp-base-overview'},
-                            {text: 'jpa', link: '/md/java/basic/java-basic-lan-sum'}
+                            {text: 'mybatis', link: '/md/db/frame/mybatis/mybatis-base-overview'},
+                            {text: 'mybatis-plus', link: '/md/db/frame/mp/mp-base-overview'},
+                            {text: 'jpa', link: '/md/db/frame/jpa/jpa-base-overview'},
                         ]
                     },
                 ]
@@ -250,11 +250,48 @@ module.exports = {
                     title: '框架介绍',
                     collapsable: false,
                     children: [
-                        '/md/db/mp/mp-base-overview',
-                        '/md/db/mp/mp-generator-new'
+                        {
+                            title: 'mybatis',
+                            collapsable: false,
+                            children: [
+                                '/md/db/frame/mybatis/mybatis-base-overview',
+                            ]
+                        },
+                        {
+                            title: 'mybatis-plus',
+                            collapsable: false,
+                            children: [
+                                '/md/db/frame/mp/mp-base-overview',
+                                '/md/db/frame/mp/mp-generator-new'
+                            ]
+                        },
+                        {
+                            title: 'jpa',
+                            collapsable: false,
+                            children: [
+                                '/md/db/frame/jpa/jpa-base-overview',
+                            ]
+                        },
                     ]
                 }
             ],
+            '/md/owner': [
+                {
+                    title: '2023',
+                    collapsable: false,
+                    children: [
+
+                    ]
+                },
+                {
+                    title: '2024',
+                    collapsable: false,
+                    children: [
+                        '/md/owner/2024/229-1',
+                        '/md/owner/2024/229-2'
+                    ]
+                },
+            ]
         }
 
     },
