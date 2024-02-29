@@ -16,7 +16,7 @@ module.exports = {
         extendMarkdown: md => {
             md.use(require("markdown-it-disable-url-encode"));
         },
-        toc: { includeLevel: [3, 4] }
+        toc: {includeLevel: [3, 4]}
     },
     themeConfig: {
         darkMode: true,
@@ -68,7 +68,8 @@ module.exports = {
                     }
                 ]
             },
-            {text: '数据库', items: [
+            {
+                text: '数据库', items: [
                     {
                         text: '数据库相关介绍', items: [
                             {text: 'mysql', link: '/md/db/info/mysql'},
@@ -83,11 +84,18 @@ module.exports = {
                             {text: 'jpa', link: '/md/java/basic/java-basic-lan-sum'}
                         ]
                     },
+                ]
+            },
+            {
+                text: '个人记录', items: [
                     {
-                        text: 'mybatis-plus', link: '/md/db/mp/mp-base-overview'
-                    }
-                ]},
-            {text: '个人记录', link: '/md/owner/owner-base-overview'},
+                        text: '2024', items: [
+                            {text: 'vuepress打包报unsupported', link: '/md/owner/2024/229-1'},
+                            {text: '待定', link: '/md/owner/2024/229-2'},
+                        ]
+                    },
+                ]
+            },
             {text: 'github', link: 'https://github.com/xianglong123/cas-blog'}
         ],
         //sidebar: 'auto', // 侧边栏配置
@@ -230,23 +238,23 @@ module.exports = {
             ],
             '/md/db/': [
                 {
-                    title: '数据库基础和原理',
+                    title: '数据库相关介绍',
                     collapsable: false,
                     children: [
-                        '/md/db/alg-basic-overview'
+                        '/md/db/info/mysql',
+                        '/md/db/info/oracle',
+                        '/md/db/info/H2'
                     ]
-                }
-            ],
-            '/md/db/mp/':[
+                },
                 {
-                    title: 'mybatis-plus入门',
+                    title: '框架介绍',
                     collapsable: false,
                     children: [
                         '/md/db/mp/mp-base-overview',
                         '/md/db/mp/mp-generator-new'
                     ]
                 }
-            ]
+            ],
         }
 
     },
