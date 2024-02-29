@@ -68,8 +68,26 @@ module.exports = {
                     }
                 ]
             },
-            {text: '数据库', link: '/md/algorithm/alg-basic-overview'},
-            {text: 'mybatis-plus', link: '/md/mp/mp-base-overview'},
+            {text: '数据库', items: [
+                    {
+                        text: '数据库相关介绍', items: [
+                            {text: 'mysql', link: '/md/db/info/mysql'},
+                            {text: 'oracle', link: '/md/db/info/oracle'},
+                            {text: 'H2', link: '/md/db/info/h2'}
+                        ]
+                    },
+                    {
+                        text: '框架介绍', items: [
+                            {text: 'mybatis', link: '/md/java/basic/java-basic-oop'},
+                            {text: 'mybatis-plus', link: '/md/db/mp/mp-base-overview'},
+                            {text: 'jpa', link: '/md/java/basic/java-basic-lan-sum'}
+                        ]
+                    },
+                    {
+                        text: 'mybatis-plus', link: '/md/db/mp/mp-base-overview'
+                    }
+                ]},
+            {text: '个人记录', link: '/md/owner/owner-base-overview'},
             {text: 'github', link: 'https://github.com/xianglong123/cas-blog'}
         ],
         //sidebar: 'auto', // 侧边栏配置
@@ -210,12 +228,22 @@ module.exports = {
                     ]
                 },
             ],
-            '/md/algorithm/': [
+            '/md/db/': [
                 {
                     title: '数据库基础和原理',
                     collapsable: false,
                     children: [
-                        '/md/algorithm/alg-basic-overview'
+                        '/md/db/alg-basic-overview'
+                    ]
+                }
+            ],
+            '/md/db/mp/':[
+                {
+                    title: 'mybatis-plus入门',
+                    collapsable: false,
+                    children: [
+                        '/md/db/mp/mp-base-overview',
+                        '/md/db/mp/mp-generator-new'
                     ]
                 }
             ]
