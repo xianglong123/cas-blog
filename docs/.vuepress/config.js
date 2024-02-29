@@ -19,6 +19,7 @@ module.exports = {
         toc: { includeLevel: [3, 4] }
     },
     themeConfig: {
+        darkMode: true,
         nav: [ // 导航栏配置
             {
                 text: 'Java',
@@ -68,6 +69,7 @@ module.exports = {
                 ]
             },
             {text: '数据库', link: '/md/algorithm/alg-basic-overview'},
+            {text: 'mybatis-plus', link: '/md/mp/mp-base-overview'},
             {text: 'github', link: 'https://github.com/xianglong123/cas-blog'}
         ],
         //sidebar: 'auto', // 侧边栏配置
