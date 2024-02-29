@@ -74,7 +74,7 @@ module.exports = {
                         text: '数据库相关介绍', items: [
                             {text: 'mysql', link: '/md/db/info/mysql'},
                             {text: 'oracle', link: '/md/db/info/oracle'},
-                            {text: 'H2', link: '/md/db/info/h2'}
+                            {text: 'h2', link: '/md/db/info/h2'}
                         ]
                     },
                     {
@@ -243,7 +243,7 @@ module.exports = {
                     children: [
                         '/md/db/info/mysql',
                         '/md/db/info/oracle',
-                        '/md/db/info/H2'
+                        '/md/db/info/h2'
                     ]
                 },
                 {
