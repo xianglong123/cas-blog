@@ -262,7 +262,8 @@ module.exports = {
                             collapsable: false,
                             children: [
                                 '/md/db/frame/mp/mp-base-overview',
-                                '/md/db/frame/mp/mp-generator-new'
+                                '/md/db/frame/mp/mp-generator-new',
+                                '/md/db/frame/mp/mp-generator-new',
                             ]
                         },
                         {

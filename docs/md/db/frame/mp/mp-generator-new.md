@@ -1,5 +1,5 @@
 ---
-title: mybatis-plus代码生成器使用
+title: 代码生成器
 
 ---
 
