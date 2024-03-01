@@ -1,15 +1,16 @@
 ---
-title: 增删改查
+title: 增删改查(通用)
 
 ---
 
 # 增删改查
 ::: tip 提示
-本章节主要讲解运用MP通用增删改查。@123
+本章节主要讲解运用MP通用增删改查。案例以[springboot融合mybatis-plus](mp-base-overview.md)的搭建结构为基础，请按照教程操作
+或者参考[源码](https://github.com/xianglong123/cas-mybatis-plus/tree/master/src/test/java/com/cas)@123
 :::
 
 ## 增
-> 这里就提供了一个默认方法
+> 这里就提供了一个默认方法 参考 [官方文档](https://baomidou.com/pages/49cc81/#select)
 
 ---
 ![img.png](images/insert.jpeg)
@@ -35,16 +36,7 @@ public class InsertTest {
 ```
 
 ## 删
-> 有四个方法
-> // 根据 entity 条件，删除记录
-int delete(@Param(Constants.WRAPPER) Wrapper<T> wrapper);
-// 删除（根据ID 批量删除）
-int deleteBatchIds(@Param(Constants.COLLECTION) Collection<? extends Serializable> idList);
-// 根据 ID 删除
-int deleteById(Serializable id);
-// 根据 columnMap 条件，删除记录
-int deleteByMap(@Param(Constants.COLUMN_MAP) Map<String, Object> columnMap);
-
+> 有四个方法参考 [官方文档](https://baomidou.com/pages/49cc81/#select)
 ---
 
 ```java
@@ -95,11 +87,7 @@ public class DeleteTest {
 ```
 
 ## 改
-> 一共2个方法
-> // 根据 whereWrapper 条件，更新记录
-int update(@Param(Constants.ENTITY) T updateEntity, @Param(Constants.WRAPPER) Wrapper<T> whereWrapper);
-// 根据 ID 修改
-int updateById(@Param(Constants.ENTITY) T entity);
+> 一共2个方法参考 [官方文档](https://baomidou.com/pages/49cc81/#select)
 
 
 ```java
@@ -267,3 +255,7 @@ public class SelectTest {
 
 ## 参考
 [官方文档](https://baomidou.com/pages/49cc81/#select)
+[源码](https://github.com/xianglong123)
+
+## 感谢
+> 您好，如果文档能帮助到您，希望可以满足作者的小小虚荣心，在源码的项目上点一个小小的star ♥️

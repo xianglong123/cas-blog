@@ -98,7 +98,7 @@ module.exports = {
             },
             {text: 'github', link: 'https://github.com/xianglong123/cas-blog'}
         ],
-        //sidebar: 'auto', // 侧边栏配置
+        // sidebar: 'auto', // 侧边栏配置
         sidebarDepth: 2, // 侧边栏显示2级
         sidebar: {
             '/md/java/': [
@@ -255,6 +255,7 @@ module.exports = {
                             collapsable: false,
                             children: [
                                 '/md/db/frame/mybatis/mybatis-base-overview',
+                                '/md/db/frame/mybatis/mybatis-desensitization-plugin',
                             ]
                         },
                         {
@@ -263,7 +264,8 @@ module.exports = {
                             children: [
                                 '/md/db/frame/mp/mp-base-overview',
                                 '/md/db/frame/mp/mp-generator-new',
-                                '/md/db/frame/mp/mp-generator-new',
+                                '/md/db/frame/mp/mp-crud',
+                                '/md/db/frame/mp/mp-crud-service',
                             ]
                         },
                         {
